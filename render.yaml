@@ -1,0 +1,41 @@
+# ============================================================
+# Blueprint do Render — publica o site como "Static Site" (plano grátis).
+# No painel do Render: New > Blueprint > escolhe o repositório do GitHub.
+# Ele lê este arquivo e cria tudo sozinho.
+# ============================================================
+services:
+  - type: web
+    runtime: static
+    name: site-vale-tec
+    buildCommand: npm ci && npm run build
+    staticPublishPath: ./dist
+    domains:
+      - valesolucoestec.com.br
+      - www.valesolucoestec.com.br
+    headers:
+      # Segurança básica
+      - path: /*
+        name: X-Content-Type-Options
+        value: nosniff
+      - path: /*
+        name: X-Frame-Options
+        value: SAMEORIGIN
+      - path: /*
+        name: Referrer-Policy
+        value: strict-origin-when-cross-origin
+      - path: /*
+        name: Permissions-Policy
+        value: camera=(), microphone=(), geolocation=()
+      - path: /*
+        name: Strict-Transport-Security
+        value: max-age=31536000
+      # Arquivos de /_astro têm hash no nome: podem ficar 1 ano em cache
+      - path: /_astro/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+    routes:
+      # Endereço que não existe mostra a nossa página de erro.
+      # (O Render só aplica esta regra quando NÃO existe arquivo no caminho.)
+      - type: rewrite
+        source: /*
+        destination: /404.html

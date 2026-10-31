@@ -1,0 +1,64 @@
+---
+// <details>/<summary> é o "acordeão" nativo do HTML:
+// abre e fecha sem nenhuma linha de JavaScript e já é acessível.
+import Eyebrow from './Eyebrow.astro';
+import { faq } from '../data/faq';
+---
+<section id="faq" class="secao" aria-labelledby="faq-titulo">
+  <div class="wrap faq">
+    <div class="faq__topo">
+      <Eyebrow>Dúvidas</Eyebrow>
+      <h2 id="faq-titulo" class="titulo-secao faq__titulo">Perguntas frequentes</h2>
+    </div>
+    <div class="faq__lista">
+      {faq.map((item, i) => (
+        <details open={i === 0}>
+          <summary>
+            <span>{item.pergunta}</span>
+            <span class="faq__mais" aria-hidden="true"></span>
+          </summary>
+          <p>{item.resposta}</p>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .faq { display: flex; flex-wrap: wrap; gap: 32px 56px; }
+  .faq__topo { flex: 1 1 300px; min-width: 0; }
+  .faq__titulo { font-size: clamp(28px, 3.2vw, 40px); color: var(--texto); }
+  .faq__lista { flex: 2 1 560px; min-width: 0; border-top: 1px solid #C9D5E3; }
+
+  details { border-bottom: 1px solid #C9D5E3; }
+  summary {
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 24px 0;
+    min-height: 44px;
+    cursor: pointer;
+    list-style: none;
+    font-family: var(--fonte-titulo);
+    font-weight: 600;
+    font-size: 18px;
+    color: var(--texto);
+  }
+  summary::-webkit-details-marker { display: none; }
+
+  /* Ícone + que vira − quando abre (feito só com CSS) */
+  .faq__mais { position: relative; flex: none; width: 28px; height: 28px; border-radius: 3px; background: var(--chip); }
+  .faq__mais::before, .faq__mais::after {
+    content: ''; position: absolute; top: 50%; left: 50%;
+    width: 12px; height: 2px; background: var(--marinho-800);
+    transform: translate(-50%, -50%);
+    transition: transform .2s ease-out;
+  }
+  .faq__mais::after { transform: translate(-50%, -50%) rotate(90deg); }
+  details[open] .faq__mais::after { transform: translate(-50%, -50%) rotate(0deg); }
+  details[open] .faq__mais { background: var(--amarelo); }
+
+  details p { padding-bottom: 24px; margin-top: -8px; font-size: 16px; line-height: 1.6; color: var(--texto-suave); max-width: 640px; }
+
+  @media (max-width: 560px) {
+    summary { font-size: 17px; padding: 20px 0; }
+  }
+</style>

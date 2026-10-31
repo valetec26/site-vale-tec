@@ -1,0 +1,327 @@
+---
+// ============================================================
+// CELULAR COM O PAINEL DO ANNYMUS
+// É a tela real do "painel do dono" do sistema, com dados ilustrativos.
+// O visitante pode ROLAR a tela dentro do celular, como num aparelho real.
+//
+// Truque importante: a tela fica em position:absolute dentro da moldura.
+// Assim o tamanho do celular vem só da largura + aspect-ratio, e o
+// conteúdo comprido NÃO estica o aparelho (ele rola por dentro).
+// ============================================================
+
+// Fontes próprias do Annymus (só carregam nesta página)
+import '@fontsource/sora/latin-700.css';
+import '@fontsource/plus-jakarta-sans/latin-500.css';
+import '@fontsource/plus-jakarta-sans/latin-600.css';
+import '@fontsource/plus-jakarta-sans/latin-700.css';
+import Icon from './Icon.astro';
+
+const kpis = [
+  { valor: '234', rotulo: 'Alunos ativos', cor: 'verde', svg: '<circle cx="9" cy="8" r="3.2"/><path d="M2.8 19c0-3 2.7-5.2 6.2-5.2s6.2 2.2 6.2 5.2"/><circle cx="17" cy="9" r="2.6"/><path d="M15.5 13.6c2.6.3 4.7 2.3 4.7 5.1"/>' },
+  { valor: 'R$ 2.340', rotulo: 'Inadimplência · 15', cor: 'vermelho', svg: '<path d="M12 3.5 22 20.5H2Z"/><path d="M12 9.5v5"/><circle cx="12" cy="17.2" r="1" fill="currentColor" stroke="none"/>' },
+  { valor: '27', rotulo: 'Vencem este mês', cor: 'azul', svg: '<rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M3 9.5h18"/><path d="M8 3v4M16 3v4"/>' },
+  { valor: 'R$ 138,80', rotulo: 'Ticket médio', cor: 'teal', svg: '<path d="M3 16 9.5 9.5l4 4L21 6"/><path d="M15 6h6v6"/>' },
+];
+
+const planos = [
+  { nome: 'Mensal', valor: 'R$ 15.740', cor: '#125891', pct: 50.5 },
+  { nome: 'Trimestral', valor: 'R$ 9.044', cor: '#1977C4', pct: 29.5 },
+  { nome: 'Semestral', valor: 'R$ 3.720', cor: '#3898E6', pct: 12.6 },
+  { nome: 'Anual', valor: 'R$ 2.365', cor: '#8BBCE4', pct: 7.4 },
+];
+
+const atalhos = [
+  { rotulo: 'Novo aluno', cor: 'azul', svg: '<circle cx="9" cy="8" r="3.4"/><path d="M2.5 20c0-3.6 2.9-6.2 6.5-6.2s6.5 2.6 6.5 6.2"/><path d="M18.5 8v6M15.5 11h6"/>' },
+  { rotulo: 'Buscar', cor: 'cinza', svg: '<circle cx="10.5" cy="10.5" r="6.5"/><path d="M20 20l-4.8-4.8"/>' },
+  { rotulo: 'Renovar', cor: 'amarelo', svg: '<path d="M4 12a8 8 0 0 1 13.7-5.7L20 8.5"/><path d="M20 4v4.5h-4.5"/><path d="M20 12a8 8 0 0 1-13.7 5.7L4 15.5"/><path d="M4 20v-4.5h4.5"/>' },
+  { rotulo: 'Agendar avaliação', cor: 'laranja', svg: '<rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M3 9.5h18"/><path d="M8 3v4M16 3v4"/>' },
+];
+
+const abas = [
+  { rotulo: 'Painel', ativo: true, svg: '<path d="M4 11.5 12 4l8 7.5"/><path d="M6 10v9a1 1 0 0 0 1 1h3v-6h4v6h3a1 1 0 0 0 1-1v-9"/>' },
+  { rotulo: 'Alunos', svg: '<circle cx="9" cy="8" r="3.2"/><path d="M2.8 19c0-3 2.7-5.2 6.2-5.2s6.2 2.2 6.2 5.2"/><circle cx="17" cy="9" r="2.6"/><path d="M15.5 13.6c2.6.3 4.7 2.3 4.7 5.1"/>' },
+  { rotulo: 'Planos', svg: '<rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/>' },
+  { rotulo: 'Fichas', svg: '<rect x="5" y="4.5" width="14" height="17" rx="2"/><rect x="9" y="2.5" width="6" height="3.5" rx="1"/><path d="M8.5 12h7M8.5 16h7"/>' },
+];
+---
+<figure class="celular-bloco">
+  <div class="celular-brilho" aria-hidden="true"></div>
+
+  <div class="celular">
+    <span class="celular__botao celular__botao--1" aria-hidden="true"></span>
+    <span class="celular__botao celular__botao--2" aria-hidden="true"></span>
+    <span class="celular__botao celular__botao--3" aria-hidden="true"></span>
+    <span class="celular__ilha" aria-hidden="true"></span>
+
+    <div
+      class="vf"
+      tabindex="0"
+      role="region"
+      aria-label="Prévia rolável do painel do dono no Annymus, com dados ilustrativos"
+    >
+      <!-- Topo azul do app -->
+      <div class="vf__topo">
+        <div class="vf__barra">
+          <span class="vf__btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg></span>
+          <span class="vf__marca">Annymus</span>
+          <span class="vf__direita">
+            <span class="vf__btn vf__sino">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 10.5a6 6 0 0 1 12 0c0 4 1.5 5.2 1.5 5.2H4.5S6 14.5 6 10.5Z"/><path d="M10 18.5a2 2 0 0 0 4 0"/></svg>
+              <span class="vf__ponto"></span>
+            </span>
+            <span class="vf__avatar">MA</span>
+          </span>
+        </div>
+        <p class="vf__ola">Olá, Marcos</p>
+        <p class="vf__sub">Resumo da academia hoje</p>
+      </div>
+
+      <div class="vf__corpo">
+        <div class="vf-card vf__alerta">
+          <span class="vf__ic vf__ic--amarelo"><svg width="18" height="18" set:html={'<path d="M12 3.5 22 20.5H2Z"/><path d="M12 9.5v5"/><circle cx="12" cy="17.2" r="1" fill="currentColor" stroke="none"/>'} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" /></span>
+          <span class="vf__alerta-txt"><b>3 alunos em risco</b><span>Pagamento atrasado ou plano vencido</span></span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8EA3B4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+        </div>
+
+        <div class="vf__kpis">
+          {kpis.map((k) => (
+            <div class="vf-card vf__kpi">
+              <span class:list={['vf__ic', 'vf__ic--p', `vf__ic--${k.cor}`]}><svg width="16" height="16" set:html={k.svg} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" /></span>
+              <span class="vf__num vf__kpi-valor">{k.valor}</span>
+              <span class="vf__kpi-rotulo">{k.rotulo}</span>
+            </div>
+          ))}
+        </div>
+
+        <div class="vf__mini">
+          <div class="vf-card"><span>Faturamento</span><b class="vf__num">R$ 32.480</b></div>
+          <div class="vf-card"><span>Matrículas</span><b class="vf__num">+19</b></div>
+          <div class="vf-card"><span>Aniversários</span><b class="vf__num">3</b></div>
+        </div>
+
+        <div class="vf-card vf__bloco">
+          <p class="vf__titulo">Alunos ativos por mês</p>
+          <p class="vf__legenda">2026 · meta de 250 em amarelo</p>
+          <svg class="vf__grafico" viewBox="0 0 330 165" aria-hidden="true">
+            <line x1="48" y1="137" x2="272" y2="137" stroke="#E7EEF3" />
+            <text x="36" y="140.5" text-anchor="end" font-size="11" fill="#8EA3B4">180</text>
+            <line x1="48" y1="76.5" x2="272" y2="76.5" stroke="#E7EEF3" />
+            <text x="36" y="80" text-anchor="end" font-size="11" fill="#8EA3B4">220</text>
+            <line x1="48" y1="16" x2="272" y2="16" stroke="#E7EEF3" />
+            <text x="36" y="19.5" text-anchor="end" font-size="11" fill="#8EA3B4">260</text>
+            <path d="M48,112.8 L68.4,102.2 L88.7,108.3 L109.1,90.1 L129.5,94.7 L149.8,84.1 L170.2,75 L190.5,78 L210.9,64.4 L231.3,59.9 L251.6,62.9 L272,55.3 L272,137 L48,137 Z" fill="#1977C4" opacity=".1" />
+            <line x1="48" y1="31.1" x2="272" y2="31.1" stroke="#C59207" stroke-width="1.5" stroke-dasharray="5 4" />
+            <text x="268" y="24.1" text-anchor="end" font-size="11" font-weight="700" fill="#546E83">meta</text>
+            <polyline points="48,112.8 68.4,102.2 88.7,108.3 109.1,90.1 129.5,94.7 149.8,84.1 170.2,75 190.5,78 210.9,64.4 231.3,59.9 251.6,62.9 272,55.3" fill="none" stroke="#1977C4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            <circle cx="272" cy="55.3" r="4.5" fill="#1977C4" stroke="#fff" stroke-width="2" />
+            <text x="284" y="59.3" font-size="13" font-weight="700" fill="#102637">234</text>
+            <text x="48" y="157" text-anchor="middle" font-size="11" fill="#8EA3B4">Jan</text>
+            <text x="109.1" y="157" text-anchor="middle" font-size="11" fill="#8EA3B4">Abr</text>
+            <text x="170.2" y="157" text-anchor="middle" font-size="11" fill="#8EA3B4">Jul</text>
+            <text x="231.3" y="157" text-anchor="middle" font-size="11" fill="#8EA3B4">Out</text>
+            <text x="272" y="157" text-anchor="middle" font-size="11" fill="#8EA3B4">Dez</text>
+          </svg>
+        </div>
+
+        <div class="vf-card vf__bloco">
+          <p class="vf__titulo">De onde vem o faturamento</p>
+          <p class="vf__legenda">Participação de cada plano</p>
+          <div class="vf__barras">
+            {planos.map((p) => (
+              <span style={`width:${p.pct}%;background:${p.cor}`}>{p.pct > 20 ? `${Math.round(p.pct)}%` : ''}</span>
+            ))}
+          </div>
+          <ul class="vf__planos">
+            {planos.map((p) => (
+              <li><i style={`background:${p.cor}`}></i><span>{p.nome}</span><b class="vf__num">{p.valor}</b></li>
+            ))}
+          </ul>
+        </div>
+
+        <div>
+          <p class="vf__secao">Operação rápida</p>
+          <div class="vf__atalhos">
+            {atalhos.map((a) => (
+              <div class="vf-card vf__atalho">
+                <span class:list={['vf__ic', 'vf__ic--g', `vf__ic--${a.cor}`]}><svg width="16" height="16" set:html={a.svg} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" /></span>
+                <span>{a.rotulo}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <!-- Menu inferior: sticky = fica preso no fundo da tela enquanto rola -->
+      <nav class="vf__abas" aria-hidden="true">
+        {abas.map((a) => (
+          <span class:list={['vf__aba', { 'vf__aba--ativa': a.ativo }]}>
+            <svg width="18" height="18" set:html={a.svg} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" />
+            {a.rotulo}
+          </span>
+        ))}
+      </nav>
+    </div>
+  </div>
+
+  <figcaption class="celular-legenda">
+    <Icon name="rolar" size={14} stroke={2} />
+    Tela real · role o painel · dados ilustrativos
+  </figcaption>
+</figure>
+
+<style>
+  .celular-bloco {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+  .celular-brilho {
+    position: absolute;
+    top: 8%;
+    left: 50%;
+    width: 120%;
+    max-width: 520px;
+    aspect-ratio: 1;
+    transform: translateX(-50%);
+    background: radial-gradient(closest-side, rgba(247, 190, 35, .16), rgba(247, 190, 35, 0));
+    pointer-events: none;
+  }
+
+  /* ----- Moldura do aparelho ----- */
+  .celular {
+    position: relative;
+    width: clamp(280px, 24vw, 300px);
+    aspect-ratio: 9 / 19.5;
+    min-height: 0;
+    background: #0A1622;
+    border-radius: 48px;
+    box-shadow:
+      0 0 0 1.5px #22384D,
+      inset 0 0 0 1px rgba(255, 255, 255, .06),
+      0 50px 90px -30px rgba(0, 0, 0, .65);
+  }
+  .celular__botao { position: absolute; width: 3px; background: #22384D; }
+  .celular__botao--1 { left: -3px; top: 22%; height: 44px; border-radius: 2px 0 0 2px; }
+  .celular__botao--2 { left: -3px; top: 31%; height: 44px; border-radius: 2px 0 0 2px; }
+  .celular__botao--3 { right: -3px; top: 26%; height: 64px; border-radius: 0 2px 2px 0; }
+  .celular__ilha {
+    position: absolute;
+    z-index: 3;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 31%;
+    height: 22px;
+    background: #0A1622;
+    border-radius: 12px;
+  }
+
+  /* ----- Tela (rolável) ----- */
+  .vf {
+    position: absolute;
+    inset: 11px;
+    border-radius: 38px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain; /* rolar o celular não rola a página junto */
+    scrollbar-width: none;
+    background: #EEF4F9;
+    color: #102637;
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    font-size: 11px;
+    line-height: 1.35;
+  }
+  .vf::-webkit-scrollbar { display: none; }
+  .vf:focus-visible { outline-offset: -3px; }
+
+  .vf p { margin: 0; }
+  .vf__num { font-family: 'Sora', system-ui, sans-serif; font-variant-numeric: tabular-nums; font-weight: 700; }
+
+  .vf__topo { background: #0B3456; padding: 46px 16px 40px; border-radius: 0 0 22px 22px; }
+  .vf__barra { display: flex; align-items: center; justify-content: space-between; }
+  .vf__btn { position: relative; width: 36px; height: 36px; border-radius: 9px; background: rgba(255, 255, 255, .12); display: flex; align-items: center; justify-content: center; }
+  .vf__marca { color: #fff; font-family: 'Sora', sans-serif; font-weight: 700; font-size: 14px; }
+  .vf__direita { display: flex; align-items: center; gap: 8px; }
+  .vf__ponto { position: absolute; top: 6px; right: 6px; width: 7px; height: 7px; border-radius: 50%; background: #F7BE23; border: 1.5px solid #0B3456; }
+  .vf__avatar { width: 32px; height: 32px; border-radius: 50%; background: #F7BE23; color: #0B3456; display: flex; align-items: center; justify-content: center; font: 700 11px 'Sora', sans-serif; }
+  .vf__ola { margin-top: 18px !important; font-family: 'Sora', sans-serif; font-weight: 700; font-size: 18px; color: #fff; }
+  .vf__sub { margin-top: 3px !important; font-size: 12px; color: #9FB8D4; }
+
+  .vf__corpo { position: relative; margin-top: -24px; padding: 0 12px 12px; display: flex; flex-direction: column; gap: 12px; }
+  .vf-card {
+    background: #fff;
+    border: 1px solid #D3DFE9;
+    border-radius: 16px;
+    box-shadow: 0 1px 2px rgba(8, 42, 77, .04), 0 10px 24px -8px rgba(8, 42, 77, .10);
+  }
+
+  .vf__alerta { display: flex; align-items: center; gap: 10px; padding: 12px 13px; border-color: #F2D9A8; }
+  .vf__alerta-txt { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+  .vf__alerta-txt b { font-size: 12.5px; }
+  .vf__alerta-txt span { color: #546E83; }
+
+  .vf__ic { flex: none; display: flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 9px; }
+  .vf__ic--p { width: 30px; height: 30px; border-radius: 8px; }
+  .vf__ic--g { width: 32px; height: 32px; }
+  .vf__ic--amarelo { background: #FEF3D8; color: #8F6A05; }
+  .vf__ic--verde { background: #E2F3EC; color: #12855F; }
+  .vf__ic--vermelho { background: #FBEAE9; color: #C9453D; }
+  .vf__ic--azul { background: #E7F1F8; color: #1977C4; }
+  .vf__ic--teal { background: #E1F4F0; color: #0E9B84; }
+  .vf__ic--cinza { background: #EDF2F7; color: #5D7793; }
+  .vf__ic--laranja { background: #FBEDE2; color: #C2610F; }
+
+  .vf__kpis { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .vf__kpi { padding: 12px; display: flex; flex-direction: column; }
+  .vf__kpi-valor { margin-top: 9px; font-size: 16px; white-space: nowrap; letter-spacing: -.01em; }
+  .vf__kpi-rotulo { color: #546E83; }
+
+  .vf__mini { display: flex; gap: 8px; }
+  .vf__mini .vf-card { flex: 1; min-width: 0; padding: 10px; display: flex; flex-direction: column; }
+  .vf__mini span { font-size: 10.5px; color: #546E83; }
+  .vf__mini b { margin-top: 2px; font-size: 12.5px; }
+
+  .vf__bloco { padding: 14px; }
+  .vf__titulo { font-size: 13px; font-weight: 700; }
+  .vf__legenda { margin: 3px 0 10px !important; font-size: 10.5px; color: #5F7688; }
+  .vf__grafico { width: 100%; height: auto; }
+  .vf__grafico text { font-family: 'Plus Jakarta Sans', sans-serif; }
+
+  .vf__barras { display: flex; height: 22px; gap: 2px; border-radius: 7px; overflow: hidden; }
+  .vf__barras span { display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; color: #fff; }
+  .vf__planos { margin-top: 10px; font-size: 11.5px; }
+  .vf__planos li { display: flex; align-items: center; gap: 8px; padding: 6px 0; border-bottom: 1px solid #E7EEF3; }
+  .vf__planos li:last-child { border-bottom: 0; }
+  .vf__planos i { width: 8px; height: 8px; border-radius: 2px; }
+  .vf__planos span { flex: 1; font-weight: 600; }
+
+  .vf__secao { margin-bottom: 8px !important; font-size: 10.5px; font-weight: 700; color: #546E83; text-transform: uppercase; letter-spacing: .04em; }
+  .vf__atalhos { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+  .vf__atalho { padding: 10px 4px; display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; font-size: 10px; font-weight: 600; line-height: 1.2; }
+
+  .vf__abas {
+    position: sticky;
+    bottom: 0;
+    z-index: 2;
+    display: flex;
+    padding: 9px 6px 16px;
+    background: #fff;
+    border-top: 1px solid #D3DFE9;
+  }
+  .vf__aba { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; color: #5F7688; font-size: 10px; font-weight: 600; }
+  .vf__aba--ativa { color: #0B3456; font-weight: 700; }
+
+  .celular-legenda {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--fonte-mono);
+    font-size: 12px;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--texto-apagado);
+  }
+</style>

@@ -1,0 +1,60 @@
+---
+import { SITE, wa } from '../data/site';
+const ano = new Date().getFullYear(); // atualiza sozinho a cada build
+---
+<footer class="rodape">
+  <div class="wrap">
+    <div class="rodape__colunas">
+      <div>
+        <img src="/img/logo-horizontal.svg" alt="Vale" width="133" height="26" class="rodape__logo" />
+        <p class="rodape__sobre">{SITE.nome}. Desenvolvimento e suporte de TI no Vale do Paraíba.</p>
+      </div>
+
+      <nav aria-label="Serviços">
+        <p class="rodape__titulo">Serviços</p>
+        <a href="/#desenvolvimento">Sites e sistemas</a>
+        <a href="/#suporte">Suporte de TI</a>
+        <a href="/#annymus">Annymus</a>
+      </nav>
+
+      <div>
+        <p class="rodape__titulo">Contato</p>
+        <a href={wa('Olá! Vim pelo site.')} target="_blank" rel="noopener">WhatsApp {SITE.whatsappExibicao}</a>
+        <a href={`https://instagram.com/${SITE.instagram}`} target="_blank" rel="noopener">Instagram @{SITE.instagram}</a>
+        <a href={SITE.app}>Acessar sistema</a>
+      </div>
+
+      <div>
+        <p class="rodape__titulo">Legal</p>
+        <a href="/politica-de-privacidade/">Política de privacidade</a>
+        <!-- Aparece só quando o Pixel está ligado (ver public/js/vt-cookies.js) -->
+        <span data-cookies-wrap hidden><button type="button" class="rodape__cookies" data-cookies>Preferências de cookies</button></span>
+      </div>
+    </div>
+
+    <div class="rodape__base">
+      <span>© {ano} {SITE.nome} · CNPJ {SITE.cnpj}</span>
+      <span>{SITE.cidade} · {SITE.uf}</span>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .rodape { padding-block: 72px 32px; background: var(--marinho-950); color: #A9B8C9; font-size: 15px; }
+  .rodape__colunas {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr));
+    gap: 40px;
+    padding-bottom: 48px;
+    border-bottom: 1px solid rgba(255, 255, 255, .1);
+  }
+  .rodape__colunas > * { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; }
+  .rodape__logo { height: 26px; width: auto; }
+  .rodape__sobre { margin-top: 20px; line-height: 1.6; max-width: 280px; }
+  .rodape__titulo { margin-bottom: 10px; font-family: var(--fonte-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--branco); }
+  .rodape a { padding-block: 6px; color: #C9D5E3; transition: color .15s; }
+  .rodape a:hover { color: var(--branco); }
+  .rodape__cookies { padding: 6px 0; background: none; border: 0; font: inherit; color: #C9D5E3; text-align: left; cursor: pointer; transition: color .15s; }
+  .rodape__cookies:hover { color: var(--branco); }
+  .rodape__base { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; padding-top: 28px; font-size: 13px; }
+</style>

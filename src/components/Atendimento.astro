@@ -1,0 +1,102 @@
+---
+// "Onde atendemos" — as cidades numa rota tracejada.
+// No computador a rota é horizontal; no celular ela fica vertical.
+import Eyebrow from './Eyebrow.astro';
+import Button from './Button.astro';
+import Icon from './Icon.astro';
+import { SITE, wa } from '../data/site';
+---
+<section id="atendimento" class="secao atendimento grid-escuro" aria-labelledby="atendimento-titulo">
+  <div class="wrap">
+    <div class="secao-topo">
+      <div class="secao-topo__titulo">
+        <Eyebrow tom="escuro">Onde atendemos</Eyebrow>
+        <h2 id="atendimento-titulo" class="titulo-secao atendimento__titulo">Do Vale do Paraíba, pro Vale do Paraíba.</h2>
+      </div>
+      <ul class="atendimento__modos">
+        <li><Icon name="casa" size={18} />Vamos até você</li>
+        <li><Icon name="chave" size={18} />Ou leva na bancada</li>
+      </ul>
+    </div>
+
+    <div class="rota">
+      <ol class="rota__lista">
+      {SITE.cidadesAtendidas.map((cidade, i) => (
+        <li class="rota__parada">
+          <span class="rota__ponto" aria-hidden="true"><span></span></span>
+          <span class="rota__texto">
+            <span class="rota__num">{String(i + 1).padStart(2, '0')}</span>
+            <span class="rota__cidade">{cidade}</span>
+          </span>
+        </li>
+      ))}
+      </ol>
+    </div>
+
+    <div class="atendimento__rodape">
+      <p>Suporte de TI presencial nas quatro cidades. Sites e sistemas: atendemos o Brasil inteiro, online.</p>
+      <Button href={wa('Olá! Vocês atendem no meu endereço?')} variante="contorno" tamanho="sm">Confirmar meu endereço</Button>
+    </div>
+  </div>
+</section>
+
+<style>
+  .atendimento { background-color: var(--marinho-800); color: var(--branco); }
+  .atendimento__titulo { font-size: clamp(28px, 3.2vw, 40px); }
+
+  .atendimento__modos { display: flex; flex-wrap: wrap; gap: 10px; }
+  .atendimento__modos li {
+    display: inline-flex; align-items: center; gap: 10px;
+    height: 44px; padding: 0 16px;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, .06);
+    border: 1px solid rgba(255, 255, 255, .16);
+    font-size: 15px; font-weight: 500;
+  }
+  .atendimento__modos :global(svg) { color: var(--amarelo); }
+
+  /* ----- Rota ----- */
+  .rota { position: relative; }
+  .rota__lista { display: flex; }
+  .rota__parada { position: relative; flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 18px; }
+  /* Tracejado: cada cidade desenha o trecho até a próxima (a última não desenha) */
+  .rota__parada:not(:last-child)::before {
+    content: '';
+    position: absolute;
+    top: 13px; left: 28px; right: 0;
+    height: 2px;
+    background: repeating-linear-gradient(90deg, rgba(255,255,255,.35) 0 8px, transparent 8px 14px);
+  }
+  .rota__ponto {
+    position: relative; z-index: 1;
+    flex: none;
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--marinho-800);
+    border: 2px solid rgba(255, 255, 255, .55);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .rota__ponto span { width: 8px; height: 8px; border-radius: 50%; background: var(--branco); }
+  .rota__texto { display: flex; flex-direction: column; gap: 6px; padding-right: 16px; }
+  .rota__num { font-family: var(--fonte-mono); font-size: 12px; letter-spacing: .06em; color: #A9B8C9; }
+  .rota__cidade { font-family: var(--fonte-titulo); font-weight: 600; font-size: clamp(19px, 1.9vw, 22px); line-height: 1.2; }
+
+  .atendimento__rodape {
+    margin-top: clamp(40px, 6vw, 64px);
+    padding-top: 28px;
+    border-top: 1px solid rgba(255, 255, 255, .12);
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 20px;
+  }
+  .atendimento__rodape p { max-width: 620px; font-size: 16px; line-height: 1.6; color: #C9D5E3; }
+
+  @media (max-width: 720px) {
+    .rota__lista { flex-direction: column; gap: 28px; }
+    .rota__parada:not(:last-child)::before {
+      top: 28px; bottom: -28px; left: 13px; right: auto;
+      width: 2px; height: auto;
+      background: repeating-linear-gradient(180deg, rgba(255,255,255,.35) 0 8px, transparent 8px 14px);
+    }
+    .rota__parada { flex-direction: row; align-items: flex-start; gap: 20px; }
+    .rota__texto { padding-top: 4px; }
+  }
+</style>

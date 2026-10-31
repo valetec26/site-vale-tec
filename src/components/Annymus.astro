@@ -1,0 +1,72 @@
+---
+import Eyebrow from './Eyebrow.astro';
+import Button from './Button.astro';
+import Icon from './Icon.astro';
+import CelularAnnymus from './CelularAnnymus.astro';
+import { SITE, wa } from '../data/site';
+
+// Cada card de preço leva pra landing page daquele público
+const precos = [
+  { publico: 'Academia', valor: 'R$ 59,99', href: '/annymus/academia/', cta: 'Ver o Annymus pra academia' },
+  { publico: 'Personal trainer', valor: 'R$ 29,99', href: '/annymus/personal/', cta: 'Ver o Annymus pra personal' },
+];
+---
+<section id="annymus" class="secao valefit" aria-labelledby="annymus-titulo">
+  <div class="wrap valefit__conteudo">
+    <div class="valefit__texto">
+      <Eyebrow tom="escuro">Produto Vale Tec</Eyebrow>
+      <h2 id="annymus-titulo" class="titulo-secao">Annymus</h2>
+      <p class="valefit__apoio">
+        Gestão de academias e personal trainers no celular. Alunos, cobranças, frequência,
+        fichas de treino e avaliação física.
+      </p>
+
+      <div class="valefit__precos">
+        {precos.map((p) => (
+          <a class="preco" href={p.href}>
+            <span class="preco__publico">{p.publico}</span>
+            <span class="preco__valor">{p.valor}<span>/mês</span></span>
+            <span class="preco__gratis">2 meses grátis</span>
+            <span class="preco__cta">{p.cta}<Icon name="seta" size={16} stroke={2} /></span>
+          </a>
+        ))}
+      </div>
+
+      <div class="valefit__botoes">
+        <Button href={wa('Olá! Quero ver uma demonstração do Annymus.')} icone="whats">Pedir demonstração</Button>
+        <Button href={SITE.app} variante="contorno" icone="entrar">Já sou cliente</Button>
+      </div>
+    </div>
+
+    <div class="valefit__celular">
+      <CelularAnnymus />
+    </div>
+  </div>
+</section>
+
+<style>
+  .valefit { background: var(--marinho-900); color: var(--branco); overflow: hidden; }
+  .valefit__conteudo { display: flex; flex-wrap: wrap; align-items: center; gap: clamp(48px, 6vw, 64px); }
+  .valefit__texto { flex: 1 1 500px; min-width: 0; }
+  .valefit__celular { flex: 1 1 340px; min-width: 0; }
+
+  .valefit__apoio { margin-top: 24px; max-width: 520px; font-size: clamp(17px, 1.6vw, 18px); line-height: 1.6; color: var(--texto-claro); }
+
+
+  .valefit__precos { margin-top: 40px; display: flex; flex-wrap: wrap; gap: 16px; }
+  .preco { flex: 1 1 220px; display: flex; flex-direction: column; padding: 20px 24px; border: 1px solid rgba(255, 255, 255, .14); border-radius: var(--raio); color: var(--branco); transition: border-color .18s ease-out, background .18s ease-out; }
+  .preco:hover { border-color: var(--amarelo); background: rgba(247, 190, 35, .06); }
+  .preco__cta { margin-top: 14px; padding-top: 12px; border-top: 1px solid rgba(255, 255, 255, .12); display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 14px; font-weight: 600; color: var(--amarelo); }
+  .preco__cta :global(svg) { transition: transform .18s ease-out; }
+  .preco:hover .preco__cta :global(svg) { transform: translateX(3px); }
+  .preco__publico { display: block; font-family: var(--fonte-mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--texto-apagado); }
+  .preco__valor { display: block; margin-top: 8px; font-family: var(--fonte-titulo); font-weight: 700; font-size: 30px; }
+  .preco__gratis { align-self: flex-start; margin-top: 10px; padding: 4px 8px; border-radius: 2px; background: rgba(247, 190, 35, .14); color: var(--amarelo); font-family: var(--fonte-mono); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; }
+  .preco__valor span { font-size: 15px; font-weight: 500; color: var(--texto-apagado); }
+
+  .valefit__botoes { margin-top: 32px; display: flex; flex-wrap: wrap; gap: 12px; }
+
+  @media (max-width: 560px) {
+    .valefit__botoes :global(.btn) { flex: 1 1 100%; justify-content: space-between; }
+  }
+</style>

@@ -1,0 +1,94 @@
+---
+// ============================================================
+// LAYOUT BASE — o "esqueleto" de toda página.
+// Cuida do <head>: título, descrição, SEO, Open Graph, favicon e fontes.
+// Cada página passa só o que muda (título, descrição, JSON-LD).
+// ============================================================
+
+// Fontes servidas pelo próprio site (sem Google Fonts):
+// carrega mais rápido e não manda o IP do visitante pro Google (LGPD).
+import '@fontsource/poppins/latin-600.css';
+import '@fontsource/poppins/latin-700.css';
+import '@fontsource/ibm-plex-sans/latin-400.css';
+import '@fontsource/ibm-plex-sans/latin-500.css';
+import '@fontsource/ibm-plex-sans/latin-600.css';
+import '@fontsource/jetbrains-mono/latin-500.css';
+import '../styles/global.css';
+
+import { SITE } from '../data/site';
+
+interface Props {
+  titulo: string;
+  descricao: string;
+  jsonLd?: object[];
+  semIndex?: boolean; // true = Google não indexa (ex.: 404)
+}
+
+const { titulo, descricao, jsonLd = [], semIndex = false } = Astro.props;
+
+// URL canônica: diz pro Google qual é o endereço "oficial" da página
+const canonical = new URL(Astro.url.pathname, SITE.url).href;
+const imagemOg = new URL('/og-image.png', SITE.url).href;
+---
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{titulo}</title>
+  <meta name="description" content={descricao} />
+  <link rel="canonical" href={canonical} />
+  {semIndex && <meta name="robots" content="noindex" />}
+
+  <!-- Cor da barra do navegador no celular -->
+  <meta name="theme-color" content="#071B2E" />
+
+  <!-- Ícones -->
+  <link rel="icon" href="/favicon.ico" sizes="32x32" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+
+  <!-- Open Graph: é o card que aparece quando alguém manda o link no WhatsApp -->
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="pt_BR" />
+  <meta property="og:site_name" content={SITE.nome} />
+  <meta property="og:title" content={titulo} />
+  <meta property="og:description" content={descricao} />
+  <meta property="og:url" content={canonical} />
+  <meta property="og:image" content={imagemOg} />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <!-- Dados estruturados (o Google lê isso pra entender o negócio) -->
+  {jsonLd.map((dado) => (
+    <script type="application/ld+json" set:html={JSON.stringify(dado)} />
+  ))}
+
+  <link rel="sitemap" href="/sitemap-index.xml" />
+</head>
+<body>
+  <a class="pular" href="#conteudo">Pular para o conteúdo</a>
+  <slot />
+  <!-- Aviso de cookies + Pixel da Meta. Só funciona depois que o ID do Pixel
+       é colado em public/js/vt-cookies.js; sem ID, não carrega nada. -->
+  <script is:inline src="/js/vt-cookies.js" data-estilo="site" defer></script>
+</body>
+</html>
+
+<style>
+  /* Link "pular pro conteúdo": invisível até alguém navegar com Tab */
+  .pular {
+    position: absolute;
+    left: 16px;
+    top: -60px;
+    z-index: 100;
+    padding: 12px 16px;
+    background: var(--amarelo);
+    color: var(--marinho-950);
+    font-weight: 600;
+    border-radius: var(--raio);
+  }
+  .pular:focus { top: 12px; }
+</style>

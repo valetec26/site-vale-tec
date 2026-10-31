@@ -1,0 +1,28 @@
+---
+import Eyebrow from './Eyebrow.astro';
+import ServicoCard from './ServicoCard.astro';
+import { desenvolvimento } from '../data/servicos';
+---
+<section id="desenvolvimento" class="secao grid-claro" aria-labelledby="dev-titulo">
+  <div class="wrap">
+    <div class="secao-topo">
+      <div class="secao-topo__titulo">
+        <Eyebrow>01 / Desenvolvimento</Eyebrow>
+        <h2 id="dev-titulo" class="titulo-secao">Sites e sistemas feitos sob medida pro seu negócio.</h2>
+      </div>
+      <p class="secao-topo__apoio">
+        Do site que coloca sua empresa no Google ao sistema que organiza a rotina da sua equipe.
+        Código próprio, rápido e pensado pra crescer.
+      </p>
+    </div>
+
+    <div class="grade-cards grade-dev">
+      {desenvolvimento.map((s) => <ServicoCard servico={s} estilo="destaque" textoCta="Pedir orçamento" />)}
+    </div>
+  </div>
+</section>
+
+<style>
+  .grid-claro { background-color: var(--fundo-claro); }
+  .grade-dev { gap: 20px; }
+</style>

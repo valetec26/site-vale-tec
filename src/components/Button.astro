@@ -1,0 +1,45 @@
+---
+// ============================================================
+// BOTÃO "SPLIT" — texto | bloco do ícone.
+// variante: 'amarelo' (ação principal), 'contorno' (secundária
+//           em fundo escuro) ou 'marinho' (em fundo amarelo).
+// tamanho:  'sm' | 'md' | 'lg'
+// compacto: esconde o texto em telas pequenas (fica só o ícone);
+//           por isso o aria-label é obrigatório nesse caso.
+// ============================================================
+import Icon from './Icon.astro';
+
+interface Props {
+  href: string;
+  variante?: 'amarelo' | 'contorno' | 'marinho';
+  tamanho?: 'sm' | 'md' | 'lg';
+  icone?: string;
+  compacto?: boolean;
+  ariaLabel?: string;
+  class?: string;
+}
+
+const {
+  href,
+  variante = 'amarelo',
+  tamanho = 'md',
+  icone = 'seta',
+  compacto = false,
+  ariaLabel,
+  class: className,
+} = Astro.props;
+
+// Link externo abre em nova aba; rel="noopener" impede a outra aba
+// de controlar a nossa (boa prática de segurança).
+const externo = href.startsWith('http');
+---
+<a
+  href={href}
+  class:list={['btn', `btn--${variante}`, `btn--${tamanho}`, { 'btn--compacto': compacto }, className]}
+  aria-label={ariaLabel}
+  target={externo ? '_blank' : undefined}
+  rel={externo ? 'noopener' : undefined}
+>
+  <span class="btn__texto"><slot /></span>
+  <span class="btn__icone"><Icon name={icone} size={tamanho === 'lg' ? 22 : 18} stroke={2} /></span>
+</a>

@@ -1,0 +1,44 @@
+---
+import Eyebrow from './Eyebrow.astro';
+
+const passos = [
+  { titulo: 'Chama no WhatsApp', texto: 'Conta o que precisa ou o problema que está acontecendo.' },
+  { titulo: 'Diagnóstico e orçamento', texto: 'Você recebe o valor antes de qualquer serviço. Sem surpresa.' },
+  { titulo: 'Execução', texto: 'No seu endereço ou na nossa bancada, conforme o serviço.' },
+  { titulo: 'Entrega com garantia', texto: 'Equipamento testado e entregue com garantia no serviço.' },
+];
+---
+<section class="secao processo" aria-labelledby="processo-titulo">
+  <div class="wrap">
+    <Eyebrow tom="escuro">Como funciona</Eyebrow>
+    <h2 id="processo-titulo" class="titulo-secao processo__titulo">Simples do primeiro contato à entrega.</h2>
+    <ol class="processo__lista">
+      {passos.map((p, i) => (
+        <li>
+          <span class="processo__num">{String(i + 1).padStart(2, '0')}</span>
+          <h3>{p.titulo}</h3>
+          <p>{p.texto}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .processo { background: var(--marinho-950); color: var(--branco); }
+  .processo__titulo { font-size: clamp(28px, 3.2vw, 40px); margin-bottom: clamp(36px, 5vw, 56px); }
+  .processo__lista {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+    border-top: 1px solid rgba(255, 255, 255, .14);
+  }
+  li { padding: 32px 28px 0 0; }
+  .processo__num { font-family: var(--fonte-mono); font-size: 14px; color: var(--amarelo); }
+  h3 { margin: 16px 0 10px; font-family: var(--fonte-titulo); font-weight: 600; font-size: 20px; }
+  p { font-size: 15px; line-height: 1.6; color: var(--texto-claro); }
+
+  @media (max-width: 560px) {
+    li { padding: 24px 0 0; }
+    li + li { margin-top: 0; }
+  }
+</style>

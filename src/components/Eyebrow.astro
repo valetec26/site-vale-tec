@@ -1,0 +1,7 @@
+---
+// Rótulo pequeno acima dos títulos de seção: ▬ 01 / DESENVOLVIMENTO
+// tom="claro" pra fundos claros (texto azul), "escuro" pra fundos azuis (texto amarelo).
+interface Props { tom?: 'claro' | 'escuro' }
+const { tom = 'claro' } = Astro.props;
+---
+<p class:list={['eyebrow', `eyebrow--${tom}`]}><span class="eyebrow__barra" aria-hidden="true"></span><slot /></p>

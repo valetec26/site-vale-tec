@@ -1,0 +1,160 @@
+---
+// ============================================================
+// HEADER — fixo no topo. No celular o menu vira um painel
+// que abre pelo botão de 3 linhas (script no final do arquivo).
+// ============================================================
+import Icon from './Icon.astro';
+import Button from './Button.astro';
+import { SITE, wa } from '../data/site';
+
+const links = [
+  { href: '/#desenvolvimento', texto: 'Desenvolvimento' },
+  { href: '/#suporte', texto: 'Suporte de TI' },
+  { href: '/#annymus', texto: 'Annymus' },
+  { href: '/#atendimento', texto: 'Onde atendemos' },
+  { href: '/#faq', texto: 'Dúvidas' },
+];
+---
+<header class="header">
+  <div class="wrap header__barra">
+    <a href="/" class="header__logo" aria-label="Vale Soluções Tecnológicas — página inicial">
+      <img src="/img/logo-horizontal.svg" alt="Vale" width="143" height="28" />
+    </a>
+
+    <nav class="header__nav" aria-label="Principal">
+      {links.map((l) => <a href={l.href}>{l.texto}</a>)}
+    </nav>
+
+    <div class="header__acoes">
+      <a class="header__app" href={SITE.app}>Acessar sistema</a>
+      <Button
+        href={wa('Olá! Vim pelo site e quero um orçamento.')}
+        tamanho="sm"
+        icone="whats"
+        compacto
+        ariaLabel="Pedir orçamento grátis pelo WhatsApp"
+      >Orçamento grátis</Button>
+      <button
+        class="header__menu-btn"
+        type="button"
+        aria-label="Abrir menu"
+        aria-expanded="false"
+        aria-controls="menu-celular"
+        data-menu-btn
+      >
+        <Icon name="menu" size={20} stroke={2} class="icone-abrir" />
+        <Icon name="fechar" size={20} stroke={2} class="icone-fechar" />
+      </button>
+    </div>
+  </div>
+
+  <!-- Painel do menu no celular (escondido até clicar) -->
+  <nav id="menu-celular" class="menu-celular" aria-label="Menu" hidden>
+    <div class="wrap">
+      {links.map((l) => <a href={l.href}>{l.texto}<Icon name="seta" size={18} /></a>)}
+      <a href={SITE.app} class="menu-celular__app">Acessar sistema <Icon name="entrar" size={18} /></a>
+    </div>
+  </nav>
+</header>
+
+<script>
+  // Abre/fecha o menu do celular.
+  // aria-expanded avisa o leitor de tela se o menu está aberto.
+  const botao = document.querySelector<HTMLButtonElement>('[data-menu-btn]');
+  const painel = document.getElementById('menu-celular');
+
+  function definirMenu(aberto: boolean) {
+    if (!botao || !painel) return;
+    botao.setAttribute('aria-expanded', String(aberto));
+    botao.setAttribute('aria-label', aberto ? 'Fechar menu' : 'Abrir menu');
+    painel.hidden = !aberto;
+  }
+
+  botao?.addEventListener('click', () => {
+    definirMenu(botao.getAttribute('aria-expanded') !== 'true');
+  });
+
+  // Clicou num link do menu -> fecha (a página rola até a seção)
+  painel?.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => definirMenu(false)));
+
+  // Esc fecha o menu
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') definirMenu(false);
+  });
+
+  // Se a tela crescer (girou o tablet), fecha o painel do celular
+  matchMedia('(min-width: 961px)').addEventListener('change', (e) => {
+    if (e.matches) definirMenu(false);
+  });
+</script>
+
+<style>
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--marinho-950);
+    border-bottom: 1px solid rgba(255, 255, 255, .08);
+  }
+  .header__barra {
+    height: var(--altura-header);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  .header__logo img { height: 28px; width: auto; }
+
+  .header__nav { display: flex; align-items: center; gap: 32px; font-size: 15px; font-weight: 500; }
+  .header__nav a, .header__app { color: #C9D5E3; transition: color .15s; }
+  .header__nav a:hover, .header__app:hover { color: var(--branco); }
+
+  .header__acoes { display: flex; align-items: center; gap: 16px; }
+  .header__app { font-size: 14px; font-weight: 500; padding: 10px 4px; }
+
+  .header__menu-btn {
+    display: none;
+    width: 44px; height: 44px;
+    align-items: center; justify-content: center;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, .18);
+    border-radius: 3px;
+    color: var(--branco);
+    cursor: pointer;
+  }
+  .header__menu-btn :global(.icone-fechar) { display: none; }
+  .header__menu-btn[aria-expanded='true'] :global(.icone-abrir) { display: none; }
+  .header__menu-btn[aria-expanded='true'] :global(.icone-fechar) { display: block; }
+
+  /* Painel do celular */
+  .menu-celular {
+    background: var(--marinho-950);
+    border-top: 1px solid rgba(255, 255, 255, .08);
+    padding-block: 8px 20px;
+    max-height: calc(100dvh - var(--altura-header));
+    overflow-y: auto;
+  }
+  .menu-celular a {
+    display: flex; align-items: center; justify-content: space-between;
+    min-height: 56px;
+    border-bottom: 1px solid rgba(255, 255, 255, .08);
+    color: var(--branco);
+    font-family: var(--fonte-titulo);
+    font-weight: 600;
+    font-size: 18px;
+  }
+  .menu-celular a :global(svg) { color: var(--amarelo); }
+  .menu-celular__app { color: #C9D5E3 !important; font-family: var(--fonte-texto) !important; font-size: 16px !important; border-bottom: 0 !important; }
+
+  @media (max-width: 960px) {
+    .header__nav, .header__app { display: none; }
+    .header__menu-btn { display: flex; }
+  }
+  @media (min-width: 961px) {
+    .menu-celular { display: none; }
+  }
+  @media (max-width: 560px) {
+    .header__acoes { gap: 10px; }
+    .header__logo img { height: 24px; }
+  }
+</style>

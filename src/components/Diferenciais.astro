@@ -1,0 +1,51 @@
+---
+// Faixa azul com os 4 diferenciais logo abaixo do hero.
+import Icon from './Icon.astro';
+
+const itens = [
+  { icone: 'casa', texto: 'No local ou na bancada' },
+  { icone: 'whats', texto: 'Orçamento grátis pelo WhatsApp' },
+  { icone: 'escudo', texto: 'Licença original' },
+  { icone: 'relogio', texto: 'Garantia no serviço' },
+];
+---
+<section class="diferenciais" aria-label="Diferenciais">
+  <div class="wrap diferenciais__wrap">
+    <ul class="diferenciais__lista">
+      {itens.map((i) => (
+        <li><Icon name={i.icone} size={22} /><span>{i.texto}</span></li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .diferenciais { background: var(--marinho-800); color: var(--branco); }
+  /* Truque das linhas: o fundo da grade é a cor da linha e o gap de 1px
+     deixa ela aparecer entre os itens — funciona em qualquer nº de colunas. */
+  .diferenciais__lista {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1px;
+    background: rgba(255, 255, 255, .1);
+  }
+  li {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 26px 20px;
+    background: var(--marinho-800);
+    font-size: 15px;
+    font-weight: 500;
+  }
+  li :global(svg) { flex: none; color: var(--amarelo); }
+
+  @media (max-width: 960px) {
+    .diferenciais__lista { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 560px) {
+    /* No celular o container perde o respiro lateral pra faixa ir de ponta a ponta */
+    .diferenciais__wrap { padding-inline: 0; }
+    li { padding: 18px 16px; font-size: 14px; gap: 10px; }
+  }
+</style>

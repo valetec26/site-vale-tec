@@ -1,0 +1,116 @@
+---
+// ============================================================
+// HERO — a primeira dobra. Separa os dois públicos logo de cara:
+// quem quer site/sistema e quem está com o computador com problema.
+// ============================================================
+import Icon from './Icon.astro';
+
+const caminhos = [
+  { href: '#desenvolvimento', rotulo: '01 / DESENVOLVIMENTO', titulo: 'Quero um site ou sistema', icone: 'codigo' },
+  { href: '#suporte', rotulo: '02 / SUPORTE DE TI', titulo: 'Meu computador precisa de ajuda', icone: 'monitor' },
+];
+---
+<section class="hero grid-escuro" aria-labelledby="hero-titulo">
+  <img class="hero__coroa" src="/img/simbolo-coroa.svg" alt="" aria-hidden="true" width="520" height="407" />
+  <div class="wrap hero__conteudo">
+    <div class="hero__texto">
+      <h1 id="hero-titulo">Tecnologia que resolve. Pra você e pra sua empresa.</h1>
+      <div class="hero__barra" aria-hidden="true"></div>
+      <p class="hero__apoio">
+        Criamos sites e sistemas sob medida e cuidamos do seu computador: formatação,
+        reparo, montagem e instalação. Atendimento no local ou na nossa bancada.
+      </p>
+    </div>
+
+    <div class="hero__caminhos">
+      <p class="hero__pergunta">Do que você precisa?</p>
+      {caminhos.map((c) => (
+        <a class="caminho" href={c.href}>
+          <span class="caminho__icone"><Icon name={c.icone} size={26} /></span>
+          <span class="caminho__texto">
+            <span class="caminho__rotulo">{c.rotulo}</span>
+            <span class="caminho__titulo">{c.titulo}</span>
+          </span>
+          <Icon name="seta" size={22} stroke={2} class="caminho__seta" />
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    overflow: hidden;
+    background-color: var(--marinho-950);
+    color: var(--branco);
+    padding-block: clamp(56px, 8vw, 88px) clamp(64px, 8vw, 96px);
+  }
+  .hero__coroa {
+    position: absolute;
+    right: -80px;
+    bottom: -60px;
+    width: 520px;
+    height: auto;
+    opacity: .05;
+    pointer-events: none;
+  }
+  .hero__conteudo {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: clamp(40px, 5vw, 56px);
+  }
+  .hero__texto { flex: 1 1 520px; min-width: 0; }
+  h1 {
+    font-family: var(--fonte-titulo);
+    font-weight: 700;
+    font-size: clamp(36px, 5.4vw, 68px);
+    line-height: 1.05;
+    letter-spacing: -.02em;
+    text-wrap: balance;
+  }
+  .hero__barra { width: 96px; height: 4px; background: var(--amarelo); margin-block: clamp(24px, 3vw, 32px); }
+  .hero__apoio { max-width: 540px; font-size: clamp(17px, 1.6vw, 19px); line-height: 1.6; color: var(--texto-claro); }
+
+  .hero__caminhos { flex: 1 1 400px; min-width: 0; display: flex; flex-direction: column; gap: 16px; }
+  .hero__pergunta {
+    margin-bottom: 4px;
+    font-family: var(--fonte-mono);
+    font-size: 12px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--texto-apagado);
+  }
+  .caminho {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 28px;
+    background: var(--marinho-850);
+    border: 1px solid rgba(255, 255, 255, .14);
+    border-radius: var(--raio);
+    transition: border-color .18s ease-out, background .18s ease-out;
+  }
+  .caminho:hover { border-color: var(--amarelo); background: #0D2B47; }
+  .caminho__icone {
+    flex: none;
+    width: 52px; height: 52px;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--marinho-800);
+    border-radius: 3px;
+    color: var(--amarelo);
+  }
+  .caminho__texto { flex: 1; min-width: 0; }
+  .caminho__rotulo { display: block; font-family: var(--fonte-mono); font-size: 12px; letter-spacing: .06em; color: var(--texto-apagado); }
+  .caminho__titulo { display: block; margin-top: 6px; font-family: var(--fonte-titulo); font-weight: 600; font-size: clamp(18px, 1.8vw, 21px); line-height: 1.25; }
+  .caminho :global(.caminho__seta) { flex: none; color: var(--amarelo); transition: transform .18s ease-out; }
+  .caminho:hover :global(.caminho__seta) { transform: translateX(3px); }
+
+  @media (max-width: 560px) {
+    .caminho { padding: 20px; gap: 16px; }
+    .caminho__icone { width: 44px; height: 44px; }
+    .hero__coroa { width: 320px; right: -60px; bottom: -40px; }
+  }
+</style>

@@ -1,0 +1,104 @@
+---
+import Eyebrow from './Eyebrow.astro';
+import ServicoCard from './ServicoCard.astro';
+import Button from './Button.astro';
+import Icon from './Icon.astro';
+import { suporte } from '../data/servicos';
+import { wa } from '../data/site';
+---
+<section id="suporte" class="secao grid-claro" aria-labelledby="suporte-titulo">
+  <div class="wrap">
+    <div class="secao-topo">
+      <div class="secao-topo__titulo">
+        <Eyebrow>02 / Suporte de TI</Eyebrow>
+        <h2 id="suporte-titulo" class="titulo-secao">Seu computador de volta, funcionando do jeito certo.</h2>
+      </div>
+      <p class="secao-topo__apoio">
+        Cada serviço mostra onde é feito. Chama no WhatsApp, explica o problema e recebe o orçamento sem compromisso.
+      </p>
+    </div>
+
+    <div class="grade-cards">
+      {suporte.map((s) => <ServicoCard servico={s} />)}
+
+      <!-- 8º card: pra quem não achou o problema na lista -->
+      <div class="card-ajuda grid-escuro">
+        <div>
+          <p class="card-ajuda__rotulo">Não encontrou o seu problema?</p>
+          <p class="card-ajuda__texto">Nos mande uma mensagem que encontramos a solução personalizada para você.</p>
+        </div>
+        <Button
+          href={wa('Olá! Meu computador está com um problema e queria um orçamento.')}
+          tamanho="sm"
+          icone="whats"
+        >Chamar no WhatsApp</Button>
+      </div>
+    </div>
+
+    <!-- Venda de equipamentos: só uma faixa discreta, não é prioridade -->
+    <div class="equipamentos">
+      <span class="equipamentos__icone"><Icon name="sacola" size={20} /></span>
+      <p>
+        <strong>Também vendemos equipamentos de informática.</strong>{' '}
+        Notebooks, computadores, peças e periféricos. Consulte o que temos disponível.
+      </p>
+      <a class="link-sublinhado" href={wa('Olá! Quero saber sobre equipamentos de informática à venda.')} target="_blank" rel="noopener">
+        Consultar no WhatsApp →
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .grid-claro { background-color: var(--fundo-claro); }
+
+  .card-ajuda {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 24px;
+    min-height: 260px;
+    padding: 28px;
+    border-radius: var(--raio);
+    background-color: var(--marinho-950);
+    color: var(--branco);
+  }
+  .card-ajuda :global(.btn) { align-self: flex-start; }
+  .card-ajuda__rotulo {
+    margin-bottom: 14px;
+    font-family: var(--fonte-mono);
+    font-size: 12px;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--amarelo);
+  }
+  .card-ajuda__texto { font-family: var(--fonte-titulo); font-weight: 600; font-size: 21px; line-height: 1.3; }
+
+  .equipamentos {
+    margin-top: 24px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px 20px;
+    padding: 20px 24px;
+    background: var(--branco);
+    border: 1px solid var(--borda);
+    border-radius: var(--raio);
+  }
+  .equipamentos__icone {
+    flex: none;
+    width: 40px; height: 40px;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--marinho-950);
+    color: var(--amarelo);
+    border-radius: 3px;
+  }
+  .equipamentos p { flex: 1 1 420px; min-width: 0; font-size: 16px; line-height: 1.55; color: var(--texto-suave); }
+  .equipamentos strong { color: var(--texto); font-weight: 600; }
+  .equipamentos .link-sublinhado { font-size: 15px; white-space: nowrap; }
+
+  @media (max-width: 560px) {
+    .card-ajuda { min-height: 0; padding: 24px; }
+    .equipamentos { padding: 20px; }
+  }
+</style>

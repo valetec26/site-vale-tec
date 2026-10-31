@@ -1,0 +1,52 @@
+---
+import Button from './Button.astro';
+import { SITE, wa } from '../data/site';
+---
+<section class="cta" aria-labelledby="cta-titulo">
+  <img class="cta__coroa" src="/img/simbolo-coroa.svg" alt="" aria-hidden="true" width="360" height="282" />
+  <div class="wrap cta__conteudo">
+    <div class="cta__texto">
+      <p class="cta__rotulo">Orçamento grátis · resposta pelo WhatsApp</p>
+      <h2 id="cta-titulo">Precisa de um site, um sistema ou socorro no computador?</h2>
+    </div>
+    <Button href={wa('Olá! Vim pelo site e quero um orçamento.')} variante="marinho" tamanho="lg" icone="whats">
+      <span class="cta__botao">
+        <span class="cta__botao-rotulo">Chamar no WhatsApp</span>
+        <span class="cta__botao-numero">{SITE.whatsappExibicao}</span>
+      </span>
+    </Button>
+  </div>
+</section>
+
+<style>
+  .cta {
+    position: relative;
+    overflow: hidden;
+    padding-block: clamp(64px, 8vw, 88px);
+    background: var(--amarelo);
+    color: var(--marinho-950);
+  }
+  .cta__coroa {
+    position: absolute;
+    right: -40px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 360px;
+    height: auto;
+    opacity: .12;
+    filter: brightness(0);
+    pointer-events: none;
+  }
+  .cta__conteudo { position: relative; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 32px; }
+  .cta__texto { flex: 1 1 520px; min-width: 0; }
+  .cta__rotulo { margin-bottom: 14px; font-family: var(--fonte-mono); font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: #3D3005; }
+  h2 { font-family: var(--fonte-titulo); font-weight: 700; font-size: clamp(26px, 3.2vw, 42px); line-height: 1.12; letter-spacing: -.015em; text-wrap: balance; }
+
+  .cta__botao { display: flex; flex-direction: column; line-height: 1.15; }
+  .cta__botao-rotulo { font-size: 12px; font-weight: 500; color: #A9B8C9; }
+  .cta__botao-numero { font-family: var(--fonte-titulo); font-size: 19px; font-weight: 600; }
+
+  @media (max-width: 560px) {
+    .cta :global(.btn) { width: 100%; justify-content: space-between; }
+  }
+</style>

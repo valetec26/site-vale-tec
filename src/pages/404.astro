@@ -1,0 +1,30 @@
+---
+// Página que aparece quando alguém acessa um endereço que não existe.
+import Base from '../layouts/Base.astro';
+import Button from '../components/Button.astro';
+import { wa } from '../data/site';
+---
+<Base titulo="Página não encontrada | Vale Tec" descricao="Esta página não existe." semIndex>
+  <main id="conteudo" class="erro grid-escuro">
+    <div class="wrap erro__conteudo">
+      <a href="/" aria-label="Voltar para a página inicial"><img src="/img/logo-horizontal.svg" alt="Vale" width="143" height="28" /></a>
+      <p class="erro__codigo">// ERRO 404</p>
+      <h1>Essa página não existe.</h1>
+      <p class="erro__texto">O endereço pode ter mudado ou foi digitado errado. Volta pro início ou fala com a gente.</p>
+      <div class="erro__botoes">
+        <Button href="/">Voltar ao início</Button>
+        <Button href={wa('Olá! Tentei acessar uma página do site e não encontrei.')} variante="contorno" icone="whats">Falar no WhatsApp</Button>
+      </div>
+    </div>
+  </main>
+</Base>
+
+<style>
+  .erro { min-height: 100dvh; display: flex; align-items: center; background-color: var(--marinho-950); color: var(--branco); padding-block: 64px; }
+  .erro__conteudo { width: 100%; }
+  .erro img { height: 28px; width: auto; }
+  .erro__codigo { margin-top: 56px; font-family: var(--fonte-mono); font-size: 13px; letter-spacing: .08em; color: var(--amarelo); }
+  h1 { margin-top: 16px; font-family: var(--fonte-titulo); font-weight: 700; font-size: clamp(34px, 5vw, 56px); line-height: 1.1; }
+  .erro__texto { margin-top: 20px; max-width: 520px; font-size: 18px; line-height: 1.6; color: var(--texto-claro); }
+  .erro__botoes { margin-top: 32px; display: flex; flex-wrap: wrap; gap: 12px; }
+</style>

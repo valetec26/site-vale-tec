@@ -1,0 +1,84 @@
+---
+// ============================================================
+// HOME — monta a página juntando as seções na ordem.
+// Quer trocar a ordem ou tirar uma seção? É só mexer nesta lista.
+// ============================================================
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import Diferenciais from '../components/Diferenciais.astro';
+import Desenvolvimento from '../components/Desenvolvimento.astro';
+import Annymus from '../components/Annymus.astro';
+import Suporte from '../components/Suporte.astro';
+import ComoFunciona from '../components/ComoFunciona.astro';
+import Atendimento from '../components/Atendimento.astro';
+import Faq from '../components/Faq.astro';
+import CtaFinal from '../components/CtaFinal.astro';
+import Footer from '../components/Footer.astro';
+
+import { SITE } from '../data/site';
+import { desenvolvimento, suporte } from '../data/servicos';
+import { faq } from '../data/faq';
+
+// ---------- Dados estruturados (schema.org) ----------
+// LocalBusiness: diz pro Google quem somos, onde atendemos e como falar com a gente.
+const negocioLocal = {
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  '@id': `${SITE.url}/#empresa`,
+  name: SITE.nome,
+  alternateName: SITE.marca,
+  url: SITE.url,
+  logo: `${SITE.url}/apple-touch-icon.png`,
+  image: `${SITE.url}/og-image.png`,
+  telephone: '+55-12-98807-0341',
+  email: SITE.email,
+  taxID: SITE.cnpj,
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: SITE.cidade,
+    addressRegion: SITE.uf,
+    addressCountry: 'BR',
+  },
+  areaServed: SITE.cidadesAtendidas.map((c) => ({ '@type': 'City', name: c })),
+  sameAs: [`https://instagram.com/${SITE.instagram}`],
+  hasOfferCatalog: {
+    '@type': 'OfferCatalog',
+    name: 'Serviços',
+    itemListElement: [...desenvolvimento, ...suporte].map((s) => ({
+      '@type': 'Offer',
+      itemOffered: { '@type': 'Service', name: s.titulo, description: s.texto },
+    })),
+  },
+};
+
+// FAQPage: as perguntas podem aparecer direto no resultado do Google.
+const paginaFaq = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faq.map((f) => ({
+    '@type': 'Question',
+    name: f.pergunta,
+    acceptedAnswer: { '@type': 'Answer', text: f.resposta },
+  })),
+};
+---
+<Base
+  titulo="Vale Tec | Sites, sistemas e suporte de TI no Vale do Paraíba"
+  descricao="Criação de sites e sistemas sob medida, formatação com backup, reparo de notebook, montagem de PC e instalação de impressoras em Tremembé, Taubaté, Pindamonhangaba e São José dos Campos. Orçamento grátis pelo WhatsApp."
+  jsonLd={[negocioLocal, paginaFaq]}
+>
+  <Header />
+  <main id="conteudo">
+    <Hero />
+    <Diferenciais />
+    <Desenvolvimento />
+    <Annymus />
+    <Suporte />
+    <ComoFunciona />
+    <Atendimento />
+    <Faq />
+    <CtaFinal />
+  </main>
+  <Footer />
+</Base>

@@ -1,0 +1,124 @@
+---
+// Política de privacidade DO SITE institucional (não do Annymus,
+// que tem os próprios termos dentro do sistema).
+// Este texto descreve o Pixel da Meta (carregado só com consentimento, ver
+// public/js/vt-cookies.js). Se entrar OUTRA ferramenta (Google Analytics,
+// formulário, outro pixel), ESTE TEXTO PRECISA SER ATUALIZADO antes de publicar.
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Eyebrow from '../components/Eyebrow.astro';
+import { SITE } from '../data/site';
+
+const atualizado = '31/10/2026';
+---
+<Base
+  titulo="Política de privacidade | Vale Tec"
+  descricao="Como o site da Vale Soluções Tecnológicas trata os seus dados, de acordo com a LGPD."
+>
+  <Header />
+  <main id="conteudo" class="secao">
+    <article class="wrap texto-legal">
+      <Eyebrow>Legal</Eyebrow>
+      <h1 class="titulo-secao">Política de privacidade</h1>
+      <p class="texto-legal__data">Última atualização: {atualizado}</p>
+
+      <h2>1. Quem somos</h2>
+      <p>
+        Este site pertence à {SITE.nome} ({SITE.marca}), nome usado por {SITE.razaoSocial},
+        CNPJ {SITE.cnpj}, com sede em {SITE.cidade}/{SITE.uf}. Somos os responsáveis pelo tratamento
+        dos dados descritos aqui, nos termos da Lei Geral de Proteção de Dados (Lei nº 13.709/2018).
+      </p>
+
+      <h2>2. O que este site coleta</h2>
+      <p>
+        Esta política vale para o site da Vale Tec e para as páginas de divulgação do Annymus que ficam
+        nele (as que mostram o produto e levam ao WhatsApp). O site não tem formulários e não pede
+        cadastro: você pode navegar sem informar nenhum dado pessoal.
+      </p>
+      <p>
+        O site só usa cookies de publicidade (o Pixel da Meta, explicado na seção 4) se você aceitar o
+        aviso que aparece na primeira visita. Não usamos cookies de estatística de terceiros. Para lembrar
+        a sua escolha sobre o aviso, o navegador guarda uma informação própria, que não identifica você.
+      </p>
+      <p>
+        Como qualquer site na internet, o servidor de hospedagem registra automaticamente dados técnicos
+        de acesso (como endereço IP, data e hora e o navegador usado). Esses registros servem para manter
+        o site no ar e seguro, e são tratados pela empresa de hospedagem.
+      </p>
+
+      <h2>3. Quando você fala com a gente pelo WhatsApp</h2>
+      <p>
+        Os botões do site abrem uma conversa no WhatsApp com uma mensagem já escrita. A partir daí,
+        usamos o seu nome, telefone e o que você nos contar apenas para responder, fazer o orçamento e
+        prestar o serviço que você pedir. Não vendemos nem repassamos esses dados para ninguém.
+      </p>
+      <p>
+        A mensagem inclui, no final, um código curto entre colchetes que indica de qual página ou
+        anúncio você veio (por exemplo, [site]). Usamos isso só para saber qual divulgação funciona.
+      </p>
+      <p>
+        O WhatsApp é um serviço da Meta e segue a política de privacidade dela.
+      </p>
+
+      <h2>4. Cookies e Pixel da Meta</h2>
+      <p>
+        Se você clicar em <strong>Aceitar</strong> no aviso de cookies, carregamos o Pixel da Meta (dona do
+        Facebook e do Instagram). Ele serve para medir o resultado dos nossos anúncios e para mostrar a
+        Vale Tec a pessoas com perfil parecido com o de quem visitou o site.
+      </p>
+      <p>
+        Com o Pixel ativo, a Meta recebe: o seu endereço IP, o navegador e o aparelho, as páginas que
+        você visitou, o anúncio de origem e o fato de você ter clicado em um botão de WhatsApp. A Meta
+        também grava cookies no seu navegador (_fbp e _fbc). Nós <strong>não</strong> enviamos a ela o
+        conteúdo das suas conversas, nome, telefone ou e-mail.
+      </p>
+      <p>
+        A base legal é o seu consentimento (art. 7º, I, da LGPD). Os dados enviados à Meta podem ser
+        processados fora do Brasil, e o tratamento por ela segue a
+        <a class="link-sublinhado" href="https://www.facebook.com/privacy/policy/" target="_blank" rel="noopener">política de privacidade da Meta</a>.
+      </p>
+      <p>
+        Se você clicar em <strong>Recusar</strong>, o Pixel não é carregado e nenhum cookie da Meta é
+        gravado por este site. Isso não limita nada do que o site oferece. Você pode mudar a escolha quando
+        quiser, em “Preferências de cookies”, no rodapé de qualquer página. A escolha fica guardada no seu
+        navegador por 180 dias; depois, perguntamos de novo. Você também pode ajustar os anúncios que
+        recebe nas configurações da sua conta no Facebook e no Instagram.
+      </p>
+
+      <h2>5. Por quanto tempo guardamos</h2>
+      <p>
+        Guardamos as conversas e dados de atendimento pelo tempo necessário para prestar o serviço,
+        cumprir a garantia e atender obrigações legais e fiscais. Depois disso, os dados são apagados.
+      </p>
+
+      <h2>6. Seus direitos</h2>
+      <p>
+        Pela LGPD, você pode, a qualquer momento: confirmar se tratamos dados seus, acessar esses dados,
+        corrigir o que estiver errado, pedir a exclusão e revogar o seu consentimento. Para isso, fale
+        com a gente pelo e-mail <a class="link-sublinhado" href={`mailto:${SITE.email}`}>{SITE.email}</a>
+        ou pelo WhatsApp {SITE.whatsappExibicao}.
+      </p>
+
+      <h2>7. Sistema Annymus</h2>
+      <p>
+        O Annymus, acessado em <a class="link-sublinhado" href={SITE.app}>annymus.valesolucoestec.com.br</a>,
+        tem os próprios Termos de Uso e Política de Privacidade, disponíveis dentro do sistema.
+      </p>
+
+      <h2>8. Mudanças nesta política</h2>
+      <p>
+        Se mudarmos a forma de tratar dados neste site, atualizamos esta página e a data no topo.
+      </p>
+    </article>
+  </main>
+  <Footer />
+</Base>
+
+<style>
+  .texto-legal { max-width: 760px; }
+  .texto-legal__data { margin-top: 12px; font-family: var(--fonte-mono); font-size: 13px; color: var(--texto-suave); }
+  h2 { margin-top: 40px; margin-bottom: 12px; font-family: var(--fonte-titulo); font-weight: 600; font-size: 21px; color: var(--texto); }
+  p { font-size: 16px; line-height: 1.7; color: var(--texto-suave); }
+  p + p { margin-top: 12px; }
+</style>
