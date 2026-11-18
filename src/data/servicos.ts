@@ -13,6 +13,9 @@ export interface Servico {
   icone: string;
   mensagem: string;
   modalidades?: Modalidade[];
+  // Se existir, o botão do card abre esta página do site em vez do WhatsApp.
+  // Usado em Sites e Landing pages: o cliente já começa pelo briefing.
+  link?: string;
 }
 
 export const desenvolvimento: Servico[] = [
@@ -21,12 +24,14 @@ export const desenvolvimento: Servico[] = [
     texto: 'Site profissional, rápido no celular e preparado pra aparecer no Google da sua região.',
     icone: 'site',
     mensagem: 'Olá! Quero orçamento de um site institucional.',
+    link: '/briefing/?tipo=site',
   },
   {
     titulo: 'Landing pages',
     texto: 'Página de venda focada em uma oferta, pronta pra receber tráfego de anúncio e virar contato no WhatsApp.',
     icone: 'landing',
     mensagem: 'Olá! Quero orçamento de uma landing page.',
+    link: '/briefing/?tipo=landing',
   },
   {
     titulo: 'Sistemas sob medida',
