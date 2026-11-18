@@ -1,0 +1,12 @@
+# Gerados no build/dev: nunca versionar
+node_modules/
+dist/
+.astro/
+# Copiadas do node_modules por `npm run fontes` (scripts/copiar-fontes-annymus.mjs)
+public/annymus/fonts/
+
+# Segredos e lixo de sistema
+.env
+.env.*
+.DS_Store
+Thumbs.db
