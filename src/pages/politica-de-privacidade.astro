@@ -3,14 +3,15 @@
 // que tem os próprios termos dentro do sistema).
 // Este texto descreve o Pixel da Meta (carregado só com consentimento, ver
 // public/js/vt-cookies.js). Se entrar OUTRA ferramenta (Google Analytics,
-// formulário, outro pixel), ESTE TEXTO PRECISA SER ATUALIZADO antes de publicar.
+// outro formulário, outro pixel), ESTE TEXTO PRECISA SER ATUALIZADO antes de publicar.
+// Seção 5 = formulário de briefing (/briefing), feito no Tally.
 import Base from '../layouts/Base.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import Eyebrow from '../components/Eyebrow.astro';
 import { SITE } from '../data/site';
 
-const atualizado = '31/10/2026';
+const atualizado = '17/11/2026';
 ---
 <Base
   titulo="Política de privacidade | Vale Tec"
@@ -33,8 +34,9 @@ const atualizado = '31/10/2026';
       <h2>2. O que este site coleta</h2>
       <p>
         Esta política vale para o site da Vale Tec e para as páginas de divulgação do Annymus que ficam
-        nele (as que mostram o produto e levam ao WhatsApp). O site não tem formulários e não pede
-        cadastro: você pode navegar sem informar nenhum dado pessoal.
+        nele (as que mostram o produto e levam ao WhatsApp). O site não pede cadastro: você pode navegar
+        sem informar nenhum dado pessoal. O único formulário é o briefing de sites e landing pages,
+        explicado na seção 5, que você só preenche se quiser contratar esse serviço.
       </p>
       <p>
         O site só usa cookies de publicidade (o Pixel da Meta, explicado na seção 4) se você aceitar o
@@ -86,13 +88,26 @@ const atualizado = '31/10/2026';
         recebe nas configurações da sua conta no Facebook e no Instagram.
       </p>
 
-      <h2>5. Por quanto tempo guardamos</h2>
+      <h2>5. Formulário de briefing (sites e landing pages)</h2>
+      <p>
+        Na página <a class="link-sublinhado" href="/briefing/">Briefing do seu site</a> você conta sobre o seu negócio
+        para a gente montar o seu site: nome, contatos, endereço, horários, serviços e preços, fotos, logo,
+        depoimentos e os dados do titular do domínio (nome e CPF ou CNPJ). Usamos essas informações só para criar,
+        publicar e manter o seu site, e para registrar o domínio no seu nome.
+      </p>
+      <p>
+        O formulário funciona no Tally (Tally BV, Bélgica), que armazena as respostas e os arquivos em nosso nome.
+        Fotos com clientes seus só devem ser enviadas com a autorização dessas pessoas. Depois que o site é entregue,
+        apagamos a resposta no Tally e guardamos os arquivos apenas o tempo necessário para manter o site.
+      </p>
+
+      <h2>6. Por quanto tempo guardamos</h2>
       <p>
         Guardamos as conversas e dados de atendimento pelo tempo necessário para prestar o serviço,
         cumprir a garantia e atender obrigações legais e fiscais. Depois disso, os dados são apagados.
       </p>
 
-      <h2>6. Seus direitos</h2>
+      <h2>7. Seus direitos</h2>
       <p>
         Pela LGPD, você pode, a qualquer momento: confirmar se tratamos dados seus, acessar esses dados,
         corrigir o que estiver errado, pedir a exclusão e revogar o seu consentimento. Para isso, fale
@@ -100,13 +115,13 @@ const atualizado = '31/10/2026';
         ou pelo WhatsApp {SITE.whatsappExibicao}.
       </p>
 
-      <h2>7. Sistema Annymus</h2>
+      <h2>8. Sistema Annymus</h2>
       <p>
         O Annymus, acessado em <a class="link-sublinhado" href={SITE.app}>annymus.valesolucoestec.com.br</a>,
         tem os próprios Termos de Uso e Política de Privacidade, disponíveis dentro do sistema.
       </p>
 
-      <h2>8. Mudanças nesta política</h2>
+      <h2>9. Mudanças nesta política</h2>
       <p>
         Se mudarmos a forma de tratar dados neste site, atualizamos esta página e a data no topo.
       </p>

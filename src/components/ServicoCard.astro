@@ -12,6 +12,12 @@ interface Props {
   textoCta?: string;
 }
 const { servico, estilo = 'simples', textoCta = 'Orçamento grátis' } = Astro.props;
+
+// Com `link`, o card leva pra uma página do próprio site (mesma aba).
+// Sem `link`, abre o WhatsApp com a mensagem pronta (nova aba).
+const href = servico.link ?? wa(servico.mensagem);
+const externo = !servico.link;
+const destino = servico.link ? 'pelo formulário de briefing' : 'pelo WhatsApp';
 ---
 <article class:list={['card', `servico--${estilo}`]}>
   {estilo === 'destaque'
@@ -27,8 +33,8 @@ const { servico, estilo = 'simples', textoCta = 'Orçamento grátis' } = Astro.p
     </ul>
   )}
 
-  <a class="card-cta" href={wa(servico.mensagem)} target="_blank" rel="noopener">
-    <span>{textoCta}<span class="sr-only"> de {servico.titulo.toLowerCase()} pelo WhatsApp</span></span>
+  <a class="card-cta" href={href} target={externo ? '_blank' : undefined} rel={externo ? 'noopener' : undefined}>
+    <span>{textoCta}<span class="sr-only"> de {servico.titulo.toLowerCase()} {destino}</span></span>
     <span class="card-cta__icone"><Icon name="seta" size={18} stroke={2} /></span>
   </a>
 </article>

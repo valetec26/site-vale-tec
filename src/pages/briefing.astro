@@ -1,0 +1,143 @@
+---
+// ============================================================
+// BRIEFING — onde o cliente de site/landing page conta tudo
+// sobre o negócio dele. O formulário mora no Tally (recebe fotos,
+// avisa por e-mail e manda pra planilha); aqui a gente só embute.
+//
+// Por que embutir e não fazer o formulário na mão?
+// Site estático não tem servidor pra receber arquivos. O Tally
+// faz esse papel de graça. Se um dia virar backend próprio,
+// só esta página muda: o resto do site continua igual.
+//
+// Os cards "Sites institucionais" e "Landing pages" da home
+// apontam pra cá (src/data/servicos.ts → campo `link`).
+// ============================================================
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Eyebrow from '../components/Eyebrow.astro';
+import Button from '../components/Button.astro';
+import { SITE, wa } from '../data/site';
+
+// ID do formulário no Tally (tally.so/r/7XK1pA). Mudou o formulário? Troca só aqui.
+const TALLY_ID = '7XK1pA';
+const linkDireto = `https://tally.so/r/${TALLY_ID}`;
+const embed = `https://tally.so/embed/${TALLY_ID}?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1`;
+
+const passos = [
+  { n: '1', titulo: 'Você conta', texto: 'Serviços, preços, horários e fotos. Uns 15 minutos, pelo celular.' },
+  { n: '2', titulo: 'A gente monta', texto: 'Uma prévia do seu site com a sua cara: suas cores, sua logo, suas fotos.' },
+  { n: '3', titulo: 'Você aprova', texto: 'Ajustamos o que precisar e colocamos no ar com o seu domínio.' },
+];
+---
+<Base
+  titulo="Briefing do seu site | Vale Tec"
+  descricao="Conte sobre o seu negócio e a Vale Tec monta o seu site ou landing page. Leva uns 15 minutos."
+>
+  <Header />
+  <main id="conteudo">
+    <section class="topo grid-claro" aria-labelledby="briefing-titulo">
+      <div class="wrap topo__grade">
+        <div class="topo__texto">
+          <Eyebrow>Sites e landing pages</Eyebrow>
+          <h1 id="briefing-titulo" class="titulo-secao">Conte sobre o seu negócio. A gente monta o seu site.</h1>
+          <p class="topo__apoio">
+            Com essas respostas e as suas fotos, o site sai sem precisar de outra reunião.
+            Tenha à mão a logo e as fotos do seu trabalho.
+          </p>
+        </div>
+
+        <aside class="whats card" aria-labelledby="whats-titulo">
+          <h2 id="whats-titulo">Prefere conversar?</h2>
+          <p>Mande uma mensagem e a gente preenche junto com você pelo WhatsApp.</p>
+          <Button href={wa('Olá! Quero fazer um site e prefiro passar as informações por aqui.')} icone="whats" tamanho="md">
+            Falar no WhatsApp
+          </Button>
+          <p class="whats__numero">{SITE.whatsappExibicao}</p>
+        </aside>
+      </div>
+
+      <ol class="wrap passos" aria-label="Como funciona">
+        {passos.map((p) => (
+          <li class="passo">
+            <span class="passo__n" aria-hidden="true">{p.n}</span>
+            <div>
+              <h3>{p.titulo}</h3>
+              <p>{p.texto}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section class="formulario" aria-label="Formulário de briefing">
+      <div class="wrap formulario__caixa">
+        <iframe
+          data-tally-src={embed}
+          loading="lazy"
+          width="100%"
+          height="900"
+          title="Briefing do seu site · Vale Tec"
+        ></iframe>
+        <noscript>
+          <p class="formulario__fallback">
+            O formulário precisa de JavaScript. <a class="link-sublinhado" href={linkDireto}>Abra o briefing direto no Tally</a>.
+          </p>
+        </noscript>
+        <p class="formulario__nota">
+          Não carregou? <a class="link-sublinhado" href={linkDireto} target="_blank" rel="noopener">Abra o formulário em outra aba</a>.
+          Seus dados são usados só para criar o seu site. Veja a <a class="link-sublinhado" href="/politica-de-privacidade/">política de privacidade</a>.
+        </p>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</Base>
+
+<!-- Script oficial do Tally: lê o data-tally-src e ajusta a altura do iframe sozinho. -->
+<script is:inline src="https://tally.so/widgets/embed.js" async></script>
+<script is:inline>
+  // Se o script do Tally carregar depois do HTML, ele chama loadEmbeds sozinho.
+  // Se carregar antes, garantimos aqui. Sem Tally (bloqueador), o link de fallback resolve.
+  window.addEventListener('load', function () {
+    if (window.Tally) { window.Tally.loadEmbeds(); return; }
+    document.querySelectorAll('iframe[data-tally-src]:not([src])').forEach(function (el) {
+      el.src = el.dataset.tallySrc;
+    });
+  });
+</script>
+
+<style>
+  .grid-claro { background-color: var(--fundo-claro); }
+  .topo { padding-block: clamp(40px, 6vw, 72px) clamp(40px, 5vw, 56px); }
+  .topo__grade { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 32px; }
+  .topo__texto { flex: 1 1 520px; min-width: 0; }
+  .topo__texto h1 { margin-top: 12px; text-wrap: balance; }
+  .topo__apoio { margin-top: 16px; max-width: 58ch; font-size: 17px; line-height: 1.6; color: var(--texto-suave); }
+
+  .whats { flex: 0 1 340px; min-width: 0; }
+  .whats h2 { font-family: var(--fonte-titulo); font-weight: 600; font-size: 19px; }
+  .whats p { font-size: 15px; line-height: 1.55; color: var(--texto-suave); }
+  .whats__numero { font-family: var(--fonte-mono); font-size: 13px; }
+
+  .passos { list-style: none; margin-top: clamp(32px, 4vw, 48px); display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+  .passo { display: flex; gap: 14px; padding: 20px; background: var(--branco); border: 1px solid var(--borda); border-radius: var(--raio); }
+  .passo__n {
+    flex: none; width: 36px; height: 36px; display: grid; place-items: center;
+    background: var(--marinho-950); color: var(--amarelo); border-radius: 3px;
+    font-family: var(--fonte-mono); font-weight: 500;
+  }
+  .passo h3 { font-family: var(--fonte-titulo); font-weight: 600; font-size: 17px; }
+  .passo p { margin-top: 4px; font-size: 15px; line-height: 1.5; color: var(--texto-suave); }
+
+  .formulario { padding-block: clamp(32px, 5vw, 56px) var(--secao); }
+  .formulario__caixa { max-width: 760px; }
+  .formulario iframe { display: block; width: 100%; border: 0; min-height: 600px; }
+  .formulario__nota, .formulario__fallback { margin-top: 20px; font-size: 14px; line-height: 1.6; color: var(--texto-suave); }
+
+  @media (max-width: 760px) {
+    .passos { grid-template-columns: 1fr; }
+    .whats { flex-basis: 100%; }
+    .whats :global(.btn) { width: 100%; justify-content: space-between; }
+  }
+</style>
