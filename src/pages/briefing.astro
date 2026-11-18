@@ -9,14 +9,25 @@
 // faz esse papel de graça. Se um dia virar backend próprio,
 // só esta página muda: o resto do site continua igual.
 //
+// Ordem pensada pro CELULAR (é de lá que a cliente preenche):
+//   1. Topo curto: o que é, quanto tempo leva, que dá pra pausar.
+//   2. "Tenha à mão": separar logo e fotos ANTES evita abandonar
+//      o formulário no meio procurando arquivo.
+//   3. O formulário logo em seguida (não escondido no fim da página).
+//   4. WhatsApp como saída fina no topo e de novo no fim, pra quem
+//      travou no meio.
+//
 // Os cards "Sites institucionais" e "Landing pages" da home
-// apontam pra cá (src/data/servicos.ts → campo `link`).
+// apontam pra cá com ?tipo=site ou ?tipo=landing
+// (src/data/servicos.ts → campo `link`). O script lá embaixo
+// repassa esse `tipo` pro Tally (campo oculto) e ajusta o texto.
 // ============================================================
 import Base from '../layouts/Base.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import Eyebrow from '../components/Eyebrow.astro';
 import Button from '../components/Button.astro';
+import Icon from '../components/Icon.astro';
 import { SITE, wa } from '../data/site';
 
 // ID do formulário no Tally (tally.so/r/7XK1pA). Mudou o formulário? Troca só aqui.
@@ -24,76 +35,159 @@ const TALLY_ID = '7XK1pA';
 const linkDireto = `https://tally.so/r/${TALLY_ID}`;
 const embed = `https://tally.so/embed/${TALLY_ID}?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1`;
 
+const msgWhats = 'Olá! Quero fazer um site e prefiro passar as informações por aqui.';
+
+// Selos do topo: respondem as 3 dúvidas que fazem a pessoa desistir
+// antes de começar ("é demorado?", "dá pelo celular?", "e se eu parar?").
+const selos = [
+  { icone: 'relogio', texto: 'Uns 15 minutos' },
+  { icone: 'monitor', texto: 'Dá pelo celular' },
+  { icone: 'check', texto: 'Pode pausar e voltar' },
+];
+
+// O que separar antes. Cada item tem o "porquê" pra cliente entender
+// que não é burocracia: é material que vai aparecer no site.
+const tenhaAMao = [
+  { titulo: 'Sua logo', texto: 'PNG ou uma foto nítida. Não tem? A gente resolve.' },
+  { titulo: '6 a 15 fotos do seu trabalho', texto: 'Na luz do dia, sem filtro forte. O original, não print.' },
+  { titulo: 'Serviços e preços', texto: 'Nome, valor e quanto tempo leva. "A partir de" vale.' },
+  { titulo: 'Dias e horários', texto: 'Quando você atende e se algum dia é diferente.' },
+];
+
 const passos = [
-  { n: '1', titulo: 'Você conta', texto: 'Serviços, preços, horários e fotos. Uns 15 minutos, pelo celular.' },
-  { n: '2', titulo: 'A gente monta', texto: 'Uma prévia do seu site com a sua cara: suas cores, sua logo, suas fotos.' },
+  { n: '1', titulo: 'Você conta', texto: 'Responde o formulário abaixo e manda as fotos.' },
+  { n: '2', titulo: 'A gente monta', texto: 'Uma prévia com a sua cara: suas cores, sua logo, suas fotos.' },
   { n: '3', titulo: 'Você aprova', texto: 'Ajustamos o que precisar e colocamos no ar com o seu domínio.' },
 ];
 ---
 <Base
   titulo="Briefing do seu site | Vale Tec"
-  descricao="Conte sobre o seu negócio e a Vale Tec monta o seu site ou landing page. Leva uns 15 minutos."
+  descricao="Conte sobre o seu negócio e a Vale Tec monta o seu site ou landing page. Leva uns 15 minutos, pelo celular."
 >
   <Header />
   <main id="conteudo">
+    <!-- 1. TOPO -->
     <section class="topo grid-claro" aria-labelledby="briefing-titulo">
-      <div class="wrap topo__grade">
-        <div class="topo__texto">
-          <Eyebrow>Sites e landing pages</Eyebrow>
-          <h1 id="briefing-titulo" class="titulo-secao">Conte sobre o seu negócio. A gente monta o seu site.</h1>
-          <p class="topo__apoio">
-            Com essas respostas e as suas fotos, o site sai sem precisar de outra reunião.
-            Tenha à mão a logo e as fotos do seu trabalho.
-          </p>
+      <div class="wrap">
+        <Eyebrow><span data-tipo-rotulo>Sites e landing pages</span></Eyebrow>
+        <h1 id="briefing-titulo" class="titulo-secao">Conte sobre o seu negócio. A gente monta o seu site.</h1>
+        <p class="topo__apoio">
+          Com essas respostas e as suas fotos, o site sai sem precisar de outra reunião.
+          Não sabe alguma resposta? Pode pular, a gente completa com você no WhatsApp.
+        </p>
+
+        <ul class="selos" aria-label="Sobre o formulário">
+          {selos.map((s) => (
+            <li class="selo"><Icon name={s.icone} size={16} /> {s.texto}</li>
+          ))}
+        </ul>
+
+        <div class="topo__acoes">
+          <Button href="#formulario" icone="seta" tamanho="lg">Começar agora</Button>
+          <a class="topo__whats link-sublinhado" href={wa(msgWhats)} target="_blank" rel="noopener">
+            Prefere conversar? Preencha com a gente no WhatsApp
+          </a>
         </div>
-
-        <aside class="whats card" aria-labelledby="whats-titulo">
-          <h2 id="whats-titulo">Prefere conversar?</h2>
-          <p>Mande uma mensagem e a gente preenche junto com você pelo WhatsApp.</p>
-          <Button href={wa('Olá! Quero fazer um site e prefiro passar as informações por aqui.')} icone="whats" tamanho="md">
-            Falar no WhatsApp
-          </Button>
-          <p class="whats__numero">{SITE.whatsappExibicao}</p>
-        </aside>
       </div>
-
-      <ol class="wrap passos" aria-label="Como funciona">
-        {passos.map((p) => (
-          <li class="passo">
-            <span class="passo__n" aria-hidden="true">{p.n}</span>
-            <div>
-              <h3>{p.titulo}</h3>
-              <p>{p.texto}</p>
-            </div>
-          </li>
-        ))}
-      </ol>
     </section>
 
-    <section class="formulario" aria-label="Formulário de briefing">
+    <!-- 2. TENHA À MÃO -->
+    <section class="mao" aria-labelledby="mao-titulo">
+      <div class="wrap mao__grade">
+        <div class="mao__texto">
+          <h2 id="mao-titulo">Antes de começar, separe:</h2>
+          <p>Deixe essas coisas abertas no celular. Assim você não precisa sair do formulário no meio.</p>
+        </div>
+        <ul class="mao__lista">
+          {tenhaAMao.map((item) => (
+            <li class="mao__item">
+              <span class="mao__check" aria-hidden="true"><Icon name="check" size={16} stroke={2.5} /></span>
+              <div>
+                <strong>{item.titulo}</strong>
+                <span>{item.texto}</span>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <!-- 3. FORMULÁRIO -->
+    <section id="formulario" class="formulario" aria-labelledby="form-titulo">
       <div class="wrap formulario__caixa">
-        <iframe
-          data-tally-src={embed}
-          loading="lazy"
-          width="100%"
-          height="900"
-          title="Briefing do seu site · Vale Tec"
-        ></iframe>
+        <h2 id="form-titulo" class="formulario__titulo">Briefing em 8 etapas</h2>
+        <p class="formulario__sub">Suas respostas ficam salvas neste aparelho. Se precisar parar, é só voltar nesta página depois.</p>
+
+        <div class="formulario__moldura">
+          <iframe
+            data-tally-src={embed}
+            loading="lazy"
+            width="100%"
+            height="900"
+            title="Briefing do seu site · Vale Tec"
+          ></iframe>
+        </div>
         <noscript>
           <p class="formulario__fallback">
             O formulário precisa de JavaScript. <a class="link-sublinhado" href={linkDireto}>Abra o briefing direto no Tally</a>.
           </p>
         </noscript>
         <p class="formulario__nota">
-          Não carregou? <a class="link-sublinhado" href={linkDireto} target="_blank" rel="noopener">Abra o formulário em outra aba</a>.
+          Não carregou? <a class="link-sublinhado" href={linkDireto} target="_blank" rel="noopener" data-tally-link>Abra o formulário em outra aba</a>.
           Seus dados são usados só para criar o seu site. Veja a <a class="link-sublinhado" href="/politica-de-privacidade/">política de privacidade</a>.
         </p>
+      </div>
+    </section>
+
+    <!-- 4. COMO FUNCIONA + SAÍDA PELO WHATSAPP -->
+    <section class="depois grid-claro" aria-labelledby="depois-titulo">
+      <div class="wrap">
+        <h2 id="depois-titulo" class="depois__titulo">O que acontece depois que você envia</h2>
+        <ol class="passos">
+          {passos.map((p) => (
+            <li class="passo">
+              <span class="passo__n" aria-hidden="true">{p.n}</span>
+              <div>
+                <h3>{p.titulo}</h3>
+                <p>{p.texto}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+
+        <aside class="whats card" aria-labelledby="whats-titulo">
+          <div>
+            <h2 id="whats-titulo">Travou em alguma pergunta?</h2>
+            <p>Mande uma mensagem e a gente preenche junto com você. {SITE.whatsappExibicao}</p>
+          </div>
+          <Button href={wa(msgWhats)} icone="whats" tamanho="md">Falar no WhatsApp</Button>
+        </aside>
       </div>
     </section>
   </main>
   <Footer />
 </Base>
 
+<script is:inline>
+  // Repassa ?tipo=site|landing pro Tally (campo oculto "tipo") e ajusta o texto do topo.
+  // Roda ANTES do embed.js do Tally (que está logo abaixo e é async),
+  // então o Tally já lê o endereço com o tipo incluído.
+  // A lista fechada evita que alguém injete texto qualquer pela URL.
+  (function () {
+    var rotulos = { site: 'Site institucional', landing: 'Landing page' };
+    var tipo = new URLSearchParams(location.search).get('tipo');
+    if (!rotulos[tipo]) return;
+
+    var rotulo = document.querySelector('[data-tipo-rotulo]');
+    if (rotulo) rotulo.textContent = rotulos[tipo];
+
+    document.querySelectorAll('iframe[data-tally-src]').forEach(function (el) {
+      el.dataset.tallySrc += '&tipo=' + tipo;
+    });
+    var link = document.querySelector('[data-tally-link]');
+    if (link) link.href += '?tipo=' + tipo;
+  })();
+</script>
 <!-- Script oficial do Tally: lê o data-tally-src e ajusta a altura do iframe sozinho. -->
 <script is:inline src="https://tally.so/widgets/embed.js" async></script>
 <script is:inline>
@@ -108,36 +202,80 @@ const passos = [
 </script>
 
 <style>
+  /* Celular primeiro: tudo empilhado. As media queries só abrem colunas em telas maiores. */
   .grid-claro { background-color: var(--fundo-claro); }
-  .topo { padding-block: clamp(40px, 6vw, 72px) clamp(40px, 5vw, 56px); }
-  .topo__grade { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 32px; }
-  .topo__texto { flex: 1 1 520px; min-width: 0; }
-  .topo__texto h1 { margin-top: 12px; text-wrap: balance; }
-  .topo__apoio { margin-top: 16px; max-width: 58ch; font-size: 17px; line-height: 1.6; color: var(--texto-suave); }
 
-  .whats { flex: 0 1 340px; min-width: 0; }
-  .whats h2 { font-family: var(--fonte-titulo); font-weight: 600; font-size: 19px; }
-  .whats p { font-size: 15px; line-height: 1.55; color: var(--texto-suave); }
-  .whats__numero { font-family: var(--fonte-mono); font-size: 13px; }
+  /* 1. Topo */
+  .topo { padding-block: 32px 28px; }
+  .topo h1 { margin-top: 10px; text-wrap: balance; }
+  .topo__apoio { margin-top: 14px; max-width: 58ch; font-size: 16px; line-height: 1.6; color: var(--texto-suave); }
 
-  .passos { list-style: none; margin-top: clamp(32px, 4vw, 48px); display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
-  .passo { display: flex; gap: 14px; padding: 20px; background: var(--branco); border: 1px solid var(--borda); border-radius: var(--raio); }
-  .passo__n {
-    flex: none; width: 36px; height: 36px; display: grid; place-items: center;
-    background: var(--marinho-950); color: var(--amarelo); border-radius: 3px;
-    font-family: var(--fonte-mono); font-weight: 500;
+  .selos { list-style: none; margin-top: 18px; display: flex; flex-wrap: wrap; gap: 8px; }
+  .selo {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 10px; background: var(--branco); border: 1px solid var(--borda); border-radius: 999px;
+    font-size: 13px; font-weight: 500; color: var(--marinho-800);
   }
-  .passo h3 { font-family: var(--fonte-titulo); font-weight: 600; font-size: 17px; }
-  .passo p { margin-top: 4px; font-size: 15px; line-height: 1.5; color: var(--texto-suave); }
+  .selo :global(svg) { color: var(--marinho-800); }
 
-  .formulario { padding-block: clamp(32px, 5vw, 56px) var(--secao); }
+  .topo__acoes { margin-top: 22px; display: flex; flex-direction: column; align-items: stretch; gap: 14px; }
+  .topo__acoes :global(.btn) { justify-content: space-between; }
+  .topo__whats { font-size: 14px; color: var(--texto-suave); text-align: center; }
+
+  /* 2. Tenha à mão */
+  .mao { padding-block: 28px; border-bottom: 1px solid var(--borda); }
+  .mao__texto h2 { font-family: var(--fonte-titulo); font-weight: 600; font-size: 20px; }
+  .mao__texto p { margin-top: 6px; font-size: 15px; line-height: 1.55; color: var(--texto-suave); }
+  .mao__lista { list-style: none; margin-top: 18px; display: grid; gap: 12px; }
+  .mao__item { display: flex; gap: 12px; align-items: flex-start; }
+  .mao__check {
+    flex: none; width: 26px; height: 26px; display: grid; place-items: center;
+    background: var(--amarelo); color: var(--marinho-950); border-radius: 50%;
+  }
+  .mao__item strong { display: block; font-size: 15px; color: var(--marinho-950); }
+  .mao__item span:not(.mao__check) { display: block; margin-top: 2px; font-size: 14px; line-height: 1.5; color: var(--texto-suave); }
+
+  /* 3. Formulário */
+  .formulario { padding-block: 28px 48px; scroll-margin-top: 72px; }
   .formulario__caixa { max-width: 760px; }
+  .formulario__titulo { font-family: var(--fonte-titulo); font-weight: 600; font-size: 20px; }
+  .formulario__sub { margin-top: 6px; font-size: 14px; line-height: 1.55; color: var(--texto-suave); }
+  .formulario__moldura { margin-top: 18px; }
   .formulario iframe { display: block; width: 100%; border: 0; min-height: 600px; }
   .formulario__nota, .formulario__fallback { margin-top: 20px; font-size: 14px; line-height: 1.6; color: var(--texto-suave); }
 
-  @media (max-width: 760px) {
-    .passos { grid-template-columns: 1fr; }
-    .whats { flex-basis: 100%; }
-    .whats :global(.btn) { width: 100%; justify-content: space-between; }
+  /* 4. Depois */
+  .depois { padding-block: 40px var(--secao); }
+  .depois__titulo { font-family: var(--fonte-titulo); font-weight: 600; font-size: 20px; }
+  .passos { list-style: none; margin-top: 18px; display: grid; gap: 12px; }
+  .passo { display: flex; gap: 14px; padding: 16px; background: var(--branco); border: 1px solid var(--borda); border-radius: var(--raio); }
+  .passo__n {
+    flex: none; width: 32px; height: 32px; display: grid; place-items: center;
+    background: var(--marinho-950); color: var(--amarelo); border-radius: 3px;
+    font-family: var(--fonte-mono); font-weight: 500;
+  }
+  .passo h3 { font-family: var(--fonte-titulo); font-weight: 600; font-size: 16px; }
+  .passo p { margin-top: 4px; font-size: 14px; line-height: 1.5; color: var(--texto-suave); }
+
+  .whats { margin-top: 24px; display: flex; flex-direction: column; gap: 14px; }
+  .whats h2 { font-family: var(--fonte-titulo); font-weight: 600; font-size: 18px; }
+  .whats p { margin-top: 4px; font-size: 15px; line-height: 1.55; color: var(--texto-suave); }
+  .whats :global(.btn) { justify-content: space-between; }
+
+  /* Tablet e computador: abre colunas */
+  @media (min-width: 761px) {
+    .topo { padding-block: clamp(48px, 6vw, 72px) clamp(40px, 5vw, 56px); }
+    .topo__apoio { font-size: 17px; }
+    .topo__acoes { flex-direction: row; align-items: center; gap: 24px; }
+    .topo__whats { text-align: left; }
+
+    .mao { padding-block: 40px; }
+    .mao__grade { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); gap: 40px; align-items: start; }
+    .mao__lista { margin-top: 0; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 28px; }
+
+    .formulario { padding-block: 48px 64px; }
+    .passos { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+    .passo { padding: 20px; }
+    .whats { flex-direction: row; align-items: center; justify-content: space-between; gap: 24px; }
   }
 </style>
